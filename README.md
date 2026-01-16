@@ -1,5 +1,42 @@
 <h2 align='center'>AutoIQ : Used Car Pricing System</h2>
 
+<p align="center">
+  <!-- Live Demo -->
+  <a href="https://themrityunjaypathak.github.io/AutoIQ/" target="_blank">
+    <img src="https://img.shields.io/badge/Live%20Demo-Website-E34F26?style=flat&logo=html5&logoColor=white" />
+  </a>
+  
+  <!-- Python -->
+  <a href="https://www.python.org/" target="_blank">
+    <img src="https://img.shields.io/badge/Python-v3.11-3776AB?style=flat&logo=python&logoColor=white" />
+  </a>
+
+  <!-- Pandas -->
+  <a href="https://pandas.pydata.org/" target="_blank">
+    <img src="https://img.shields.io/badge/Pandas-v2.3-150458?style=flat&logo=pandas&logoColor=white" />
+  </a>
+
+  <!-- Scikit-learn -->
+  <a href="https://scikit-learn.org/stable/" target="_blank">
+    <img src="https://img.shields.io/badge/scikit--learn-v1.7-F7931E?style=flat&logo=scikit-learn&logoColor=white" />
+  </a>
+
+  <!-- FastAPI -->
+  <a href="https://autoiq.onrender.com/docs" target="_blank">
+    <img src="https://img.shields.io/badge/FastAPI-v0.116-009688?style=flat&logo=fastapi&logoColor=white" />
+  </a>
+
+  <!-- Docker -->
+  <a href="https://hub.docker.com/r/themrityunjaypathak/autoiq" target="_blank">
+    <img src="https://img.shields.io/badge/Docker-v29.1-2496ED?style=flat&logo=docker&logoColor=white" />
+  </a>
+
+  <!-- Git -->
+  <a href="https://git-scm.com/" target="_blank">
+    <img src="https://img.shields.io/badge/Git-v2.47-F05032?style=flat&logo=git&logoColor=white" />
+  </a>
+</p>
+
 <a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="AutoIQ by Motor.co" src="https://github.com/user-attachments/assets/e34c618f-2773-4a1c-b632-9c822338918b"></a>
 
 ## Table of Contents
@@ -214,6 +251,10 @@
 
 ### Combine Data from Multiple Cities
 
+<details>
+<summary>Click Here to view Example Function</summary>
+<br>
+
 ```python
 # Parsing HTML Content of Hyderabad City from Cars24 Website
 soup = scrape_car_listing('https://www.cars24.com/buy-used-cars-hyderabad/')
@@ -262,6 +303,7 @@ df['engine_capacity'] = engine_capacity
 # Final DataFrame after Web Scrapping
 df.head()
 ```
+</details>
 
 <hr>
 
@@ -291,7 +333,104 @@ The final dataset consists of 2,800+ unique car listings, with each record conta
 
 ## Workflow
 
-<img title="workflow" src="https://github.com/user-attachments/assets/6a6ff974-a548-4556-bf74-e96a9fa10bb4">
+```mermaid
+flowchart TB
+
+  %% =========================
+  %% 1) DATA COLLECTION
+  %% =========================
+  subgraph S1["1) Data Collection"]
+    direction TB
+    A1["Cars24 Website"] --> A2["Scraping Notebook<br/>scrape_code.ipynb"]
+    A2 --> A3["Raw Dataset<br/>scraped_data.csv"]
+  end
+
+  %% =========================
+  %% 2) DATA PREPROCESSING + EDA
+  %% =========================
+  subgraph S2["2) Data Processing"]
+    direction TB
+    B1["Load Raw CSV<br/>pd.read_csv()"]
+    B2["Cleaning & Preprocessing<br/>Handle Nulls, Format Columns, Fix Types"]
+    B3["Save Cleaned Dataset<br/>clean_data.parquet"]
+
+    B4["Exploratory Data Analysis<br/>Feature Understanding, Trends, Distributions"]
+    B5["Save Dataset after EDA<br/>clean_data_after_eda.parquet"]
+
+    B6["Outlier Removal<br/>IQR/Rules-based Filtering"]
+    B7["Final Training Dataset<br/>clean_data_with_no_outlier.parquet"]
+
+    A3 --> B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7
+  end
+
+  %% =========================
+  %% 3) MODEL TRAINING
+  %% =========================
+  subgraph S3["3) Model Training"]
+    direction TB
+    C1["Train Multiple Regression Models"]
+    C2["Model Optimization with<br/>Hyperparameter Tuning"]
+    C3["Select Best Model<br/>based on MAE & R2 score"]
+    C4["Serialize Model Artifact<br/>as model.pkl"]
+
+    B7 --> C1 --> C2 --> C3 --> C4
+  end
+
+  %% =========================
+  %% 4) MODEL SERVING API
+  %% =========================
+  subgraph S4["4) Model Serving"]
+    direction TB
+    D1["FastAPI App<br/>loads model.pkl"]
+    D2["Endpoints"]
+    D2a["GET /<br/>Root"]
+    D2b["GET /health<br/>Health Check"]
+    D2c["POST /predict<br/>Returns Price Prediction"]
+
+    C4 --> D1 --> D2
+    D2 --> D2a
+    D2 --> D2b
+    D2 --> D2c
+
+    D3["Deployment<br/>Render Cloud"]
+    D1 --> D3
+  end
+
+  %% =========================
+  %% 5) CONTAINERIZATION
+  %% =========================
+  subgraph S5["5) Containerization"]
+    direction TB
+    E1["Dockerfile with<br/>Multi-stage Build"]
+    E2["Build Docker Image<br/>API + Model + Dependencies"]
+    E3["Push Image to Docker Hub<br/>for reuse & deployment"]
+
+    D1 --> E1 --> E2 --> E3
+  end
+
+  %% =========================
+  %% 6) FRONTEND INTEGRATION
+  %% =========================
+  subgraph S6["6) Frontend Integration"]
+    direction TB
+    F1["Frontend UI<br/>HTML/CSS/JS"]
+    F2["User enters car details<br/>as JSON Payload"]
+    F3["POST request to /predict<br/>endpoint deployed on Render"]
+    F4["Prediction displayed<br/>on the Website"]
+
+    F1 --> F2 --> F3 --> F4
+    D3 --> F3
+  end
+
+  %% =========================
+  %% Minimal dark styling (GitHub-safe)
+  %% =========================
+  classDef block fill:#0d1117,stroke:#30363d,stroke-width:1px,color:#ffffff;
+  classDef step  fill:#161b22,stroke:#8b949e,stroke-width:1px,color:#ffffff;
+
+  class S1,S2,S3,S4,S5,S6 block;
+  class A1,A2,A3,B1,B2,B3,B4,B5,B6,B7,C1,C2,C3,C4,D1,D2,D2a,D2b,D2c,D3,E1,E2,E3,F1,F2,F3,F4 step;
+```
 
 <hr>
 
@@ -302,7 +441,7 @@ Follow these steps carefully to setup and run the project on your local machine 
 ### 1. Clone the Repository
 First, you need to clone the project from GitHub to your local system.
 ```bash
-git clone https://github.com/TheMrityunjayPathak/AutoIQ.git
+git clone https://github.com/themrityunjaypathak/AutoIQ.git
 ```
 
 ### 2. Build the Docker Image
@@ -337,6 +476,11 @@ ALLOWED_ORIGINS=list_of_URLs_that_are_allowed_to_access_the_API
 #### `config.py` file
 - Load and validate environment variables from `.env`.
 - Uses Pydantic `BaseSettings` to read environment variables, validate types and provide easy access.
+
+<details>
+<summary>Click Here to view Example Python File</summary>
+<br>
+
 ```python
 # api/config.py
 import os
@@ -364,10 +508,16 @@ class Settings(BaseSettings):
 # Create an object of Settings class
 settings = Settings()
 ```
+</details>
 
 #### `main.py` file
 - Uses `settings` from `config.py` in FastAPI.
 - Imports the `settings` object to provide API's metadata dynamically from `.env`.
+
+<details>
+<summary>Click Here to view Example Python File</summary>
+<br>
+
 ```python
 # api/main.py
 import pickle
@@ -391,6 +541,7 @@ with open(settings.PIPE_PATH, "rb") as f:
 with open(settings.MODEL_FREQ_PATH, "rb") as f:
     model_freq = pickle.load(f)
 ```
+</details>
 
 ### 4. Run the Docker Container
 Start the application using Docker. This will run the FastAPI server and handle all the dependencies automatically.
@@ -522,6 +673,10 @@ Follow these steps carefully to containerize your project with Docker :
 ### 3. Create the Dockerfile
 - Create a `Dockerfile` and place it in the root folder of your Repository.
 
+<details>
+<summary>Click Here to view Example Dockerfile</summary>
+<br>
+
 ```Dockerfile
 # Start with the official Python 3.11 image.
 # -slim means this is a smaller Debian-based image with fewer preinstalled packages, which makes it lighter.
@@ -560,11 +715,16 @@ EXPOSE 8000
 # --port 8000 specifies the port.
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
+</details>
 
 ### 4. Create the `.dockerignore` File
 - This file tells Docker which files and folders to exclude from the image.
 - This keeps the image small and prevents unnecessary files from being copied.
 - A `.dockerignore` file is used to exclude all files and folders that are not required to run your application.
+
+<details>
+<summary>Click Here to view Example Dockerignore File</summary>
+<br>
 
 ```bash
 # Virtual Environment
@@ -612,6 +772,7 @@ utils/
 build/
 dist/
 ```
+</details>
 
 ### 5. Build the Docker Image
 - A Docker image is essentially a read-only template that contains everything needed to run an application.
@@ -790,14 +951,25 @@ Access the live Website [here](https://themrityunjaypathak.github.io/AutoIQ/) or
 ## Model Training & Evaluation
 
 ### 1. Load the Data
+
+<details>
+<summary>Click Here to view Code Snippet</summary>
+<br>
+
 ```python
 # Importing load_parquet function from read_data module
 from read_data import load_parquet
 cars = load_parquet('clean_data', 'clean_data_after_eda.parquet')
 cars.head()
 ```
+</details>
 
 ### 2. Split the Data
+
+<details>
+<summary>Click Here to view Code Snippet</summary>
+<br>
+
 ```python
 # Creating Features and Target Variable
 X = cars.drop('price', axis=1)
@@ -806,8 +978,14 @@ y = cars['price']
 # Splitting Data into Training and Testing Set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 ```
+</details>
 
 ### 3. Build Preprocessing Pipeline
+
+<details>
+<summary>Click Here to view Code Snippet</summary>
+<br>
+
 ```python
 # Pipeline for Nominal Column
 nominal_cols = ['fuel_type','transmission','brand']
@@ -838,8 +1016,14 @@ ctf = ColumnTransformer(transformers=[
     ('scaling', numerical_trf, numerical_cols)
 ], remainder='passthrough', n_jobs=-1)
 ```
+</details>
 
 ### 4. Evaluate Multiple Models
+
+<details>
+<summary>Click Here to view Code Snippet</summary>
+<br>
+
 ```python
 # Models Dictionary
 models = {
@@ -876,6 +1060,8 @@ for name, model in models.items():
     print(f'Average R2-Score : {cv_results['test_r2'].mean():.2f}')
     print(f'Standard Deviation of R2-Score : {cv_results['test_r2'].std():.2f}')
 ```
+</details>
+
 ```
 Model : LR
 ----------------------------------------
@@ -919,6 +1105,11 @@ Standard Deviation of Error : 2640.02
 Average R2-Score : 0.86
 Standard Deviation of R2-Score : 0.02
 ```
+
+<details>
+<summary>Click Here to view Code Snippet</summary>
+<br>
+
 ```python
 # Plotting Metric Comparision Graph
 results_df = pd.DataFrame(results)
@@ -940,10 +1131,16 @@ for container in ax[1].containers:
 plt.tight_layout()
 plt.show()
 ```
+</details>
 
 <img title="model-comparison" src="https://github.com/user-attachments/assets/79fc4a22-1d71-4c63-8eaf-b40c19c8e936">
 
 ### 5. Creating Stacking Regressor
+
+<details>
+<summary>Click Here to view Code Snippet</summary>
+<br>
+
 ```python
 # Assigning Base Model for StackingRegressor
 base_model = [('rf', rf),('xgb', xgb),('gb', gb)]
@@ -970,6 +1167,8 @@ print(f"Standard Deviatacion of Error : {cv_results['test_mae'].std():.2f}")
 print(f"Average R2-Score : {cv_results['test_r2'].mean():.2f}")
 print(f"Standard Deviation of R2-Score : {cv_results['test_r2'].std():.2f}")
 ```
+</details>
+
 ```
 Average Error : 87885.34
 Standard Deviatacion of Error : 1279.54
@@ -991,6 +1190,11 @@ Standard Deviation of R2-Score : 0.01
 | <img title="lr-curve" src="https://github.com/user-attachments/assets/56912d24-f2a6-4c3b-95ce-a0489fa1652a"> | <img title="lr-curve" src="https://github.com/user-attachments/assets/4fb325ac-90f8-4420-839e-6fdc187bbbf8"> |
 
 ### 7. Hyperparameter Tuning
+
+<details>
+<summary>Click Here to view Code Snippet</summary>
+<br>
+
 ```python
 # Parameter Distribution
 param_dist = {
@@ -1020,6 +1224,7 @@ rcv.fit(X_train, y_train)
 # Best Estimator
 best_model = rcv.best_estimator_
 ```
+</details>
 
 ### 8. Performance Evaluation Comparison
 
@@ -1041,29 +1246,29 @@ best_model = rcv.best_estimator_
 
 ## Challenges & Solutions
 
-### Challenge 1 → Getting Real World Data
+### Challenge 1 : Getting Real-World Data
 
 #### Problem
-- I wanted to use real-world data instead of pre-cleaned toy dataset, as it represents messy, real-life scenarios.
-- However, Cars24 loads its content dynamically using JS, meaning a simple HTTP request won't be enough.
+- I wanted to use real-world data instead of a toy dataset, as it better represents messy, real-life scenarios.
+- However, Cars24 loads its content dynamically using JavaScript, meaning a simple HTTP request is not enough.
 
 #### Solution
-- I used [Selenium](https://www.selenium.dev/) to simulate a real browser, ensuring that the page was fully loaded before scraping.
-- Once the content was fully rendered, I used [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) to efficiently parse the HTML.
-- This approach allowed me to reliably capture all the details.
+- I used [Selenium](https://www.selenium.dev/) to simulate a real browser, ensuring the page was fully loaded before scraping.
+- Once the content was rendered, I used [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) to efficiently parse the HTML.
+- This approach allowed me to reliably capture complete car details.
 
-### Challenge 2 → Handling Large Datasets Efficiently
+### Challenge 2 : Handling Large Datasets Efficiently
 
 #### Problem
-- The raw scraped dataset was large, taking up unnecessary space.
-- Loading it repeatedly during experimentation became inefficient.
+- The raw scraped dataset was large and consumed unnecessary memory.
+- Loading it repeatedly during experimentation became slow and inefficient.
 
 #### Solution
-- I optimized memory consumption by downcasting data types to reduce memory usage.
-- I also stored the dataset in Parquet format, which compresses data without losing information.
-- It allows for much faster read/write speeds as compared to CSV.
+- I optimized memory usage by downcasting data types.
+- I stored the dataset in Parquet format, which compresses data without losing information.
+- This enabled much faster read/write performance compared to CSV.
 
-### Challenge 3 → Avoiding Data Leakage
+### Challenge 3 : Avoiding Data Leakage
 
 #### Problem
 - If preprocessing is applied to the entire dataset, test data can leak into the training process.
@@ -1071,77 +1276,77 @@ best_model = rcv.best_estimator_
 
 #### Solution
 - I implemented Scikit-learn [Pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html) and [ColumnTransformer](https://scikit-learn.org/stable/modules/generated/sklearn.compose.ColumnTransformer.html) to apply preprocessing only on training data.
-- This keeps the test data completely unseen during preprocessing, preventing data leakage.
+- This kept the test data completely unseen during preprocessing, preventing leakage.
 
-### Challenge 4 → Deploying Model as API
-
-#### Problem
-- Even after building the machine learning pipeline, it remained offline and could only be used locally.
-- There is no way to provide inputs and get predictions over the web or from other applications.
-- The model is dependent on the local system and could not serve predictions to external users or services.
-
-#### Solution
-- I deployed the machine learning model as an API using [FastAPI](https://fastapi.tiangolo.com/).
-- This allows users and applications to send inputs and receive predictions online in real time.
-- I added a `/predict` endpoint for serving predictions and a `/health` endpoint to monitor API status.
-- I also implemented rate limiting and input validation to prevent misuse and ensure stability under load.
-- These measures made the model accessible, reliable and ready for production use.
-
-### Challenge 5 → Accessibility for Non-Technical Users
+### Challenge 4 : Deploying the Model as an API
 
 #### Problem
-- Even if the API works perfectly fine, non-technical users may still find it difficult to test and use.
-- This limits accessibility.
+- Even after building the ML pipeline, it remained offline and could only be used locally.
+- There was no way to send inputs and get predictions over the web or from other applications.
+- The model depended on the local system and could not serve predictions to external users or services.
 
 #### Solution
-- I created a HTML/CSS/JS frontend that sends requests to the API and displays predictions instantly.
-- I also included a example payload in Swagger UI, so that users can test it without any extra effort.
+- I deployed the ML model as an API using [FastAPI](https://fastapi.tiangolo.com/).
+- This allowed users and applications to send inputs and receive predictions in real time.
+- I added a `/predict` endpoint for predictions and a `/health` endpoint for monitoring API status.
+- I implemented input validation and rate limiting to prevent misuse and ensure stability under load.
+- These improvements made the API accessible, reliable, and production-ready.
 
-### Challenge 6 → Consistent Deployment Across Environments
+### Challenge 5 : Accessibility for Non-Technical Users
+
+#### Problem
+- Even if the API works correctly, non-technical users may still find it difficult to test and use.
+- This limits adoption and accessibility.
+
+#### Solution
+- I created an HTML/CSS/JS frontend that sends requests to the API and displays predictions instantly.
+- I also included an example payload in Swagger UI so users can test the API with minimal effort.
+
+### Challenge 6 : Consistent Deployment Across Environments
 
 #### Problem
 - Installing dependencies and setting up the environment manually is time-consuming and error-prone.
-- Especially when running on different machines with different operating system.
-- This also made sharing the project with others more difficult, as they would have to replicate the exact setup.
+- This becomes worse across different machines and operating systems.
+- Sharing the project also becomes difficult, since others must replicate the exact setup.
 
 #### Solution
 - I created a multi-stage Dockerfile.
-- It builds the FastAPI application, installs dependencies and copies only the required files into the final image.
-- I used a `.dockerignore` file to exclude unnecessary files to keep the image small and deployment fast.
-- This allowed me to run the project consistently on any system with [Docker](https://www.docker.com/) installed.
-- It eliminates the hassle of worrying about dependency mismatches or operating system specific issues.
+- It builds the FastAPI application, installs dependencies, and copies only required files into the final image.
+- I used a `.dockerignore` file to exclude unnecessary files and keep the image lightweight.
+- This allows the project to run consistently on any system with [Docker](https://www.docker.com/) installed.
+- It eliminates dependency mismatches and OS-specific issues.
 - Same Docker image can be used to deploy on Render, Docker Hub or run locally with a single docker command.
 
 <hr>
 
 ## Impact
 
-#### End-to-End Deployment
-- Built and deployed a full ML pipeline using FastAPI for real-time used car price predictions.
-- Enabled quicker and more accurate pricing decisions for the business.
+### End-to-End Deployment  
+- Built and deployed an end-to-end ML pipeline using FastAPI to serve real-time used car price predictions.  
 
-#### Dataset Optimization
-- Reduced dataset memory usage by 90%, cutting down on storage costs and improving system performance.
-- Converted the dataset to Parquet format for faster data processing and shorter load times.
+### Dataset Optimization  
+- Reduced dataset memory usage by 90%, improving pipeline efficiency and lowering storage needs.  
+- Converted data to Parquet, reducing load time and speeding up processing.  
 
-#### Data-Driven Model Selection
-- Evaluated multiple regression models using cross-validation to select the most accurate ones.
-- Improved pricing accuracy by relying only on top-performing models.
-  
-#### Significant Performance Gains
-- Achieved 30% lower MAE and 12% higher R2-score, making price predictions more accurate.
-- Improved accuracy helped set more competitive prices and boosted sales potential.
-  
-#### Greater Prediction Reliability
-- Increased model stability by 70%, resulting in more consistent predictions.
-- Fewer pricing errors led to stronger customer trust and smoother operations.
+### Data-Driven Model Selection
+- Evaluated multiple regression models using cross-validation for fair comparison.
+- Selected the best-performing model(s) to improve prediction accuracy and consistency.
+
+### Significant Performance Gains
+- Achieved 30% lower MAE and 12% higher R2 score, improving prediction quality.
+- Better accuracy helped support more competitive and confident pricing decisions.
+
+### Greater Prediction Reliability  
+- Reduced prediction error variance by 70%, ensuring stable and reliable predictions.  
+- More consistent predictions reduced pricing mistakes and built customer trust.
 
 <hr>
 
 ## Folder Structure
 
 ```
-.
+AutoIQ/
+|
 ├── api/                      # FastAPI Code for making Predictions
 │   ├── main.py              
 │   └── config.py            
