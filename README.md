@@ -1398,6 +1398,6 @@ This project is licensed under the [MIT License](LICENSE). You are free to use a
 
 <div align='left'>
   
-**[`^        Scroll to Top       ^`](#autoiq--car-price-prediction)**
+**[`^        Scroll to Top       ^`](#autoiq--used-car-pricing-system)**
 
 </div>
