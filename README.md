@@ -41,8 +41,10 @@
 
 ## Table of Contents
 - [Problem Statement](#problem-statement)
-- [Dataset](#dataset)
+- [Overview](#overview)
 - [Workflow](#workflow)
+- [Impact](#impact)
+- [Dataset](#dataset)
 - [Setup](#setup)
 - [Testing](#testing)
 - [Dockerization](#dockerization)
@@ -50,284 +52,25 @@
 - [Application](#application)
 - [Model Training & Evaluation](#model-training--evaluation)
 - [Challenges & Solutions](#challenges--solutions)
-- [Impact](#impact)
 - [Folder Structure](#folder-structure)
 - [License](#license)
 
 <hr>
 
 ## Problem Statement
-- In the used car market, buyers and sellers often struggle to determine a fair price for their vehicle.
+- In the used car market, buyers and sellers often struggle to determine a fair price for their vehicles.
 - This project aims to provide accurate and transparent pricing for used cars by analyzing real-world data.
 
 <hr>
 
-## Dataset
-- To train the model, I collected real-world used car listings data directly from the [Cars24](https://www.cars24.com/) website.
-- Since Cars24 uses dynamically loaded content, a static scraper would not capture all the data.
-- Instead, I implemented an automated Selenium + BeautifulSoup Python Script.
-
-### Web Scraping Script (`scrape_car_listing`)
-
-**Input :** URL of a Cars24 listing page to scrape.
-
-#### 1. Launch Chrome Automatically
-- Script uses `ChromeDriverManager` to install and manage the drivers without manual setup.
-  
-#### 2. Open Cars24 Website
-- Loads the given URL in a real browser session.
-
-#### 3. Simulate Scrolling
-- Scrolls down the page in increments, with short random pauses (2-4 seconds) between scrolls.
-- This ensures all dynamically loaded listings are fetched.
-  
-#### 4. Check for End of Page
-- Stops scrolling when the bottom of the page is reached or no new content loads.
-
-#### 5. Capture Rendered HTML
-- Once fully loaded, it retrieves the complete DOM (including dynamically injected elements).
-  
-#### 6. Parse HTML with BeautifulSoup
-- Returns a BeautifulSoup object containing the entire page's HTML for later parsing and data extraction.
-
-> [!NOTE]
-> 
-> At this stage, no data is extracted, the output is just the complete HTML source.
-> 
-> It which will be parsed to a separate script to extract features like price, model, year, transmission, etc.
-
-<hr>
-
-### Data Extraction Script (`get_car_details`)
-
-**Input :** BeautifulSoup object (`soup`) containing the fully-rendered HTML of a Cars24 listing page.
-
-#### 1. Find Raw Model Name Texts
-- Looks for `<span>` elements with class `sc-braxZu kjFjan`.
-- Extracts the text using `.text` into a list called `model_name`.
-- The code only keeps those model that start with `2` and stores them in `clean_model_name`.
-
-<details>
-<summary>Click to view the HTML Element Snapshot</summary>
-&nbsp;
-<img title="cars24" src="https://github.com/user-attachments/assets/66524e3d-4c26-4edc-8f8a-40b17016eda4">
-</details>
-
-> [!IMPORTANT]
->
-> Inspect the HTML Element : `<span id class="sc-braxZu kjFjan">2016 Maruti Wagon R 1.0</span>`
->
-> Tag : `<span>` → id (empty) → class : `sc-braxZu kjFjan` (two classes, separated by space)
-> 
-> However when you hover over it in the browser, it shows : `span.sc-braxZu.kjFjan`
->
-> CSS uses a dot `.` to indicate classes. The dot is not a part of the class name itself.
->
-> It just means "this is a class", it is not the part of the class name.
->
-> This might look confusing for someone with little HTML/CSS knowledge, so it's better to clarify it.
-
-#### 2. Collect Specification Text Blocks
-- Looks for `<p>` elements with class `sc-braxZu kvfdZL` (each holds one specification value).
-- These are appended to `specs` list.
-   
-```python
-['69.95k km',
- 'Petrol',
- 'Manual',
- '1st owner',
- 'DL-1C',
- '70.72k km',
- 'Diesel',
- 'Manual',
- '2nd owner',
- 'UP-14',
- '15.96k km',
- 'CNG',
- 'Manual',
- '1st owner',
- 'UP-16',...]
-```
-
-<details>
-<summary>Click to view the HTML Element Snapshot</summary>
-&nbsp;
-<img title="cars24" src="https://github.com/user-attachments/assets/5185f66b-3de6-4354-ae11-fcb0b8fbb793">
-</details>
-
-#### 3. Group Specifications
-- The flat `specs` list is split into consecutive groups of 5 (`clean_specs.appendspecs[i:i+5])`).
-- Each group corresponds to one listing's set of specification value.
-   
-```python
-[['69.95k km', 'Petrol', 'Manual', '1st owner', 'DL-1C'],
- ['70.72k km', 'Diesel', 'Manual', '2nd owner', 'UP-14'],
- ['15.96k km', 'CNG', 'Manual', '1st owner', 'UP-16'],...]
-```
-
-#### 4. Map Groups into Fields
-- From each 5-item group, the script extracts :
-    - `clean_specs[0]` → `km_driven`
-    - `clean_specs[1]` → `fuel_type`
-    - `clean_specs[2]` → `transmission`
-    - `clean_specs[3]` → `owner`
-- `clean_specs[4]` → `number_plate` exists but is of no use.
-
-#### 5. Extract Price Values
-- `soup.find_all('p', 'sc-braxZu cyPhJl')` collects price elements into `price` list.
-- The script then slices `price = price[2:]`, removing the first two entries (non-listing elements on the page).
-- So the remaining prices align with the listings.
-
-```python
-['₹3.09 lakh',
- '₹5.71 lakh',
- '₹7.37 lakh',...]
-```
-
-<details>
-<summary>Click to view the HTML Element Snapshot</summary>
-&nbsp;
-<img title="cars24" src="https://github.com/user-attachments/assets/9a974eca-b39b-4e9a-bdc3-ff5abe6c9491">
-</details>
-
-#### 6. Extract Listing Links
-- `soup.find_all('a', 'styles_carCardWrapper__sXLIp')` collects anchor tag for each card and extracts `href`.
-
-```python
-['https://www.cars24.com/buy-used-honda-amaze-2018-cars-noida-11068642783/',
- 'https://www.cars24.com/buy-used-ford-ecosport-2020-cars-noida-11234948707/',
- 'https://www.cars24.com/buy-used-tata-altroz-2024-cars-noida-10563348767/',...]
-```
-
-<details>
-<summary>Click to view the HTML Element Snapshot</summary>
-&nbsp;
-<img title="cars24" src="https://github.com/user-attachments/assets/fbac495f-6894-41dc-b469-2d23e90e3610">
-</details>
-
-#### 7. Combine into a DataFrame
-- All lists are assembled into a `pandas.DataFrame`.
-- The column names are `model_name`, `km_driven`, `fuel_type`, `transmission`, `owner`, `price`, `link`.
-
-#### 8. Return the DataFrame
-- Finally, function returns the above DataFrame for further cleaning, analysis and modelling.
-
-<hr>
-
-### Engine Capacity Script (`get_engine_capacity`)
-
-**Input :** List of URLs for individual car listings (`link` from the previous DataFrame).
-
-#### 1. Iterate through each Car Listing URL
-- Loops over the list of individual car listing page URL.
-
-#### 2. Send an HTTP Request
-- Uses the `requests` library to retrieve each page's HTML content.
-- Adds a User-Agent header to simulate a real browser and reduce blocking risk.
-- Applies a random timeout (4-8 seconds) between requests to avoid overloading the server.
-
-#### 3. Parse the HTML Content
-- Converts the response into a BeautifulSoup object using the `lxml` parser for fast, reliable parsing.
-
-#### 4. Locate Engine Capacity Label
-- Searches for all `<p>` tags with the class `sc-braxZu jjIUAi`.
-- Checks if the text exactly matches "Engine capacity".
-
-<details>
-<summary>Click to view the HTML Element Snapshot</summary>
-&nbsp;
-<img title="cars24" src="https://github.com/user-attachments/assets/80a81a7e-ffd6-4413-ab74-650dbf63afc6">
-</details>
-
-#### 5. Extract the Value
-- If the label is found, grab the value from the next sibling element (`1197 cc`).
-- Marks the entry as successfully found.
-- If no engine capacity value is found, store `None` to maintain positional consistency.
-
-#### 6. Return the List
-- Outputs a list of engine capacities in the same order as the input URLs.
-
-<hr>
-
-### Combine Data from Multiple Cities
-
-<details>
-<summary>Click Here to view Example Function</summary>
-<br>
-
-```python
-# Parsing HTML Content of Hyderabad City from Cars24 Website
-soup = scrape_car_listing('https://www.cars24.com/buy-used-cars-hyderabad/')
-
-# Extracting Car Details of Hyderabad City
-hyderabad = get_car_details(soup)
-```
-
-```python
-# Parsing HTML Content of Bangalore City from Cars24 Website
-soup = scrape_car_listing('https://www.cars24.com/buy-used-cars-bangalore/')
-
-# Extracting Car Details of Bangalore City
-bangalore = get_car_details(soup)
-```
-
-```python
-# Parsing HTML Content of Mumbai City from Cars24 Website
-soup = scrape_car_listing('https://www.cars24.com/buy-used-cars-mumbai/')
-
-# Extracting Car Details of Mumbai City
-mumbai = get_car_details(soup)
-```
-
-```python
-# Parsing HTML Content of Delhi City from Cars24 Website
-soup = scrape_car_listing('https://www.cars24.com/buy-used-cars-delhi-ncr/')
-
-# Extracting Car Details of Delhi City
-delhi = get_car_details(soup)
-```
-
-```python
-# Concatenating Car Details of Different Cities into Single DataFrame
-df = pd.concat([hyderabad, bangalore, mumbai, delhi], ignore_index=True)
-df.head()
-```
-
-```python
-# Extracting engine capacity of each car using its car listing link from Cars24 Website
-engine_capacity = get_engine_capacity(df['link'])
-
-# Adding "engine_capacity" column in the DataFrame
-df['engine_capacity'] = engine_capacity
-
-# Final DataFrame after Web Scrapping
-df.head()
-```
-</details>
-
-<hr>
-
-### Dataset Description
-
-The final dataset consists of 2,800+ unique car listings, with each record containing :
-
-- `model_name` : Model name of the car (2014 Hyundai Grand i10, etc).         
-- `fuel_type` : Type of fuel the car uses (Petrol, Diesel, CNG, Electric).        
-- `transmission` : Type of transmission the car has (Automatic or Manual).           
-- `owner` : Number of previous owners (1st owner, 2nd owner, 3rd owner, etc).
-- `engine_capacity` : Size of the engine (in cc).                              
-- `km_driven` : Total distance traveled by the car (in km).                   
-- `price` : Selling price of the car (target variable).                      
-
-> [!TIP]
->
-> Scraping code in the repository depends on the current structure of the target website.
->
-> Websites often update their HTML, element IDs or class names which can break the scraping logic.
->
-> So before running the scraper, inspect the website to ensure the HTML structure matches the code.
->    
-> Update any selectors or parsing logic if the website has changed.
+## Overview
+- Built and deployed an end-to-end machine learning pipeline to predict used car prices from real-world data.
+- Collected and cleaned 2,800+ used car records from Cars24 using Selenium and BeautifulSoup.
+- Optimized dataset memory usage by 90% through downcasting data types and converting to Parquet format.
+- Trained models with Scikit-learn Pipelines & ColumnTransformer to avoid data leakage.
+- Deployed the machine learning model as an API using FastAPI on Render.
+- Built a HTML/CSS/JS frontend hosted on GitHub Pages to interact with the REST API and display predictions.
+- Containerized the entire application using Docker and pushed to Docker Hub for reproducibility.
 
 <hr>
 
@@ -431,6 +174,283 @@ flowchart TB
   class S1,S2,S3,S4,S5,S6 block;
   class A1,A2,A3,B1,B2,B3,B4,B5,B6,B7,C1,C2,C3,C4,D1,D2,D2a,D2b,D2c,D3,E1,E2,E3,F1,F2,F3,F4 step;
 ```
+
+<hr>
+
+## Impact
+- Improved model performance with 30% lower MAE and 12% higher R2 score compared to the baseline model.
+- Increased prediction reliability by reducing error variance by 70%, delivering more stable price estimates.
+- Optimized data processing by reducing dataset memory usage by 90%, improving training speed and efficiency.
+- Deployed the trained ML model as a production-ready FastAPI service to serve real-time predictions.
+- Designed an interactive web interface that connects to the API and provides instant used car price estimates.
+- Ensured reproducibility and portability by containerizing the full ML pipeline using Docker.
+
+<hr>
+
+## Dataset
+- To train the model, I collected real-world used car listings data directly from the [Cars24](https://www.cars24.com/) website.
+- Since Cars24 uses dynamically loaded content, a static scraper would not capture all the data.
+- Instead, I implemented an automated Selenium + BeautifulSoup Python Script.
+
+### Web Scraping Script (`scrape_car_listing`)
+
+<details>
+<summary>Click Here to view more Details</summary>
+&nbsp;
+
+**Input :** URL of a Cars24 listing page to scrape.
+
+#### 1. Launch Chrome Automatically
+- Script uses `ChromeDriverManager` to install and manage the drivers without manual setup.
+  
+#### 2. Open Cars24 Website
+- Loads the given URL in a real browser session.
+
+#### 3. Simulate Scrolling
+- Scrolls down the page in increments, with short random pauses (2-4 seconds) between scrolls.
+- This ensures all dynamically loaded listings are fetched.
+  
+#### 4. Check for End of Page
+- Stops scrolling when the bottom of the page is reached or no new content loads.
+
+#### 5. Capture Rendered HTML
+- Once fully loaded, it retrieves the complete DOM (including dynamically injected elements).
+  
+#### 6. Parse HTML with BeautifulSoup
+- Returns a BeautifulSoup object containing the entire page's HTML for later parsing and data extraction.
+
+#### Note
+- At this stage, no data is extracted, the output is just the complete HTML source.
+- It will later be parsed by a separate script to extract features like price, model, year, transmission, etc.
+
+</details>
+
+### Data Extraction Script (`get_car_details`)
+
+<details>
+<summary>Click Here to view more Details</summary>
+&nbsp;
+
+**Input :** BeautifulSoup object (`soup`) containing the fully-rendered HTML of a Cars24 listing page.
+
+#### 1. Find Raw Model Name Texts
+- Looks for `<span>` elements with class `sc-braxZu kjFjan`.
+- Extracts the text using `.text` into a list called `model_name`.
+- The code only keeps those model that start with `2` and stores them in `clean_model_name`.
+
+<details>
+<summary>Click to view the HTML Element Snapshot</summary>
+&nbsp;
+<img title="cars24" src="https://github.com/user-attachments/assets/66524e3d-4c26-4edc-8f8a-40b17016eda4">
+</details>
+
+#### Important
+- Inspect the HTML Element : `<span id class="sc-braxZu kjFjan">2016 Maruti Wagon R 1.0</span>`
+- Tag : `<span>` → id (empty) → class : `sc-braxZu kjFjan` (two classes, separated by space)
+- However when you hover over it in the browser, it shows : `span.sc-braxZu.kjFjan`
+- CSS uses a dot `.` to indicate classes. The dot is not a part of the class name itself.
+- It just means "this is a class", it is not the part of the class name.
+- This might look confusing for someone with little HTML/CSS knowledge, so it's better to clarify it.
+
+#### 2. Collect Specification Text Blocks
+- Looks for `<p>` elements with class `sc-braxZu kvfdZL` (each holds one specification value).
+- These are appended to `specs` list.
+   
+```python
+['69.95k km',
+ 'Petrol',
+ 'Manual',
+ '1st owner',
+ 'DL-1C',
+ '70.72k km',
+ 'Diesel',
+ 'Manual',
+ '2nd owner',
+ 'UP-14',
+ '15.96k km',
+ 'CNG',
+ 'Manual',
+ '1st owner',
+ 'UP-16',...]
+```
+
+<details>
+<summary>Click to view the HTML Element Snapshot</summary>
+&nbsp;
+<img title="cars24" src="https://github.com/user-attachments/assets/5185f66b-3de6-4354-ae11-fcb0b8fbb793">
+</details>
+
+#### 3. Group Specifications
+- The flat `specs` list is split into consecutive groups of 5 (`clean_specs.appendspecs[i:i+5])`).
+- Each group corresponds to one listing's set of specification value.
+   
+```python
+[['69.95k km', 'Petrol', 'Manual', '1st owner', 'DL-1C'],
+ ['70.72k km', 'Diesel', 'Manual', '2nd owner', 'UP-14'],
+ ['15.96k km', 'CNG', 'Manual', '1st owner', 'UP-16'],...]
+```
+
+#### 4. Map Groups into Fields
+- From each 5-item group, the script extracts :
+    - `clean_specs[0]` → `km_driven`
+    - `clean_specs[1]` → `fuel_type`
+    - `clean_specs[2]` → `transmission`
+    - `clean_specs[3]` → `owner`
+- `clean_specs[4]` → `number_plate` exists but is of no use.
+
+#### 5. Extract Price Values
+- `soup.find_all('p', 'sc-braxZu cyPhJl')` collects price elements into `price` list.
+- The script then slices `price = price[2:]`, removing the first two entries (non-listing elements on the page).
+- So the remaining prices align with the listings.
+
+```python
+['₹3.09 lakh',
+ '₹5.71 lakh',
+ '₹7.37 lakh',...]
+```
+
+<details>
+<summary>Click to view the HTML Element Snapshot</summary>
+&nbsp;
+<img title="cars24" src="https://github.com/user-attachments/assets/9a974eca-b39b-4e9a-bdc3-ff5abe6c9491">
+</details>
+
+#### 6. Extract Listing Links
+- `soup.find_all('a', 'styles_carCardWrapper__sXLIp')` collects anchor tag for each card and extracts `href`.
+
+```python
+['https://www.cars24.com/buy-used-honda-amaze-2018-cars-noida-11068642783/',
+ 'https://www.cars24.com/buy-used-ford-ecosport-2020-cars-noida-11234948707/',
+ 'https://www.cars24.com/buy-used-tata-altroz-2024-cars-noida-10563348767/',...]
+```
+
+<details>
+<summary>Click to view the HTML Element Snapshot</summary>
+&nbsp;
+<img title="cars24" src="https://github.com/user-attachments/assets/fbac495f-6894-41dc-b469-2d23e90e3610">
+</details>
+
+#### 7. Combine into a DataFrame
+- All lists are assembled into a `pandas.DataFrame`.
+- The column names are `model_name`, `km_driven`, `fuel_type`, `transmission`, `owner`, `price`, `link`.
+
+#### 8. Return the DataFrame
+- Finally, function returns the above DataFrame for further cleaning, analysis and modelling.
+
+</details>
+
+### Engine Capacity Script (`get_engine_capacity`)
+
+<details>
+<summary>Click Here to view more Details</summary>
+&nbsp;
+
+**Input :** List of URLs for individual car listings (`link` from the previous DataFrame).
+
+#### 1. Iterate through each Car Listing URL
+- Loops over the list of individual car listing page URL.
+
+#### 2. Send an HTTP Request
+- Uses the `requests` library to retrieve each page's HTML content.
+- Adds a User-Agent header to simulate a real browser and reduce blocking risk.
+- Applies a random timeout (4-8 seconds) between requests to avoid overloading the server.
+
+#### 3. Parse the HTML Content
+- Converts the response into a BeautifulSoup object using the `lxml` parser for fast, reliable parsing.
+
+#### 4. Locate Engine Capacity Label
+- Searches for all `<p>` tags with the class `sc-braxZu jjIUAi`.
+- Checks if the text exactly matches "Engine capacity".
+
+<details>
+<summary>Click to view the HTML Element Snapshot</summary>
+&nbsp;
+<img title="cars24" src="https://github.com/user-attachments/assets/80a81a7e-ffd6-4413-ab74-650dbf63afc6">
+</details>
+
+#### 5. Extract the Value
+- If the label is found, grab the value from the next sibling element (`1197 cc`).
+- Marks the entry as successfully found.
+- If no engine capacity value is found, store `None` to maintain positional consistency.
+
+#### 6. Return the List
+- Outputs a list of engine capacities in the same order as the input URLs.
+
+</details>
+
+### Combine Data from Multiple Cities
+
+<details>
+<summary>Click Here to view Example Function</summary>
+<br>
+
+```python
+# Parsing HTML Content of Hyderabad City from Cars24 Website
+soup = scrape_car_listing('https://www.cars24.com/buy-used-cars-hyderabad/')
+
+# Extracting Car Details of Hyderabad City
+hyderabad = get_car_details(soup)
+```
+
+```python
+# Parsing HTML Content of Bangalore City from Cars24 Website
+soup = scrape_car_listing('https://www.cars24.com/buy-used-cars-bangalore/')
+
+# Extracting Car Details of Bangalore City
+bangalore = get_car_details(soup)
+```
+
+```python
+# Parsing HTML Content of Mumbai City from Cars24 Website
+soup = scrape_car_listing('https://www.cars24.com/buy-used-cars-mumbai/')
+
+# Extracting Car Details of Mumbai City
+mumbai = get_car_details(soup)
+```
+
+```python
+# Parsing HTML Content of Delhi City from Cars24 Website
+soup = scrape_car_listing('https://www.cars24.com/buy-used-cars-delhi-ncr/')
+
+# Extracting Car Details of Delhi City
+delhi = get_car_details(soup)
+```
+
+```python
+# Concatenating Car Details of Different Cities into Single DataFrame
+df = pd.concat([hyderabad, bangalore, mumbai, delhi], ignore_index=True)
+df.head()
+```
+
+```python
+# Extracting engine capacity of each car using its car listing link from Cars24 Website
+engine_capacity = get_engine_capacity(df['link'])
+
+# Adding "engine_capacity" column in the DataFrame
+df['engine_capacity'] = engine_capacity
+
+# Final DataFrame after Web Scrapping
+df.head()
+```
+</details>
+
+### Dataset Description
+
+<details>
+<summary>Click Here to view more Details</summary>
+&nbsp;
+
+The final dataset consists of 2,800+ unique car listings, with each record containing :
+
+- `model_name` : Model name of the car (2014 Hyundai Grand i10, etc).         
+- `fuel_type` : Type of fuel the car uses (Petrol, Diesel, CNG, Electric).        
+- `transmission` : Type of transmission the car has (Automatic or Manual).           
+- `owner` : Number of previous owners (1st owner, 2nd owner, 3rd owner, etc).
+- `engine_capacity` : Size of the engine (in cc).                              
+- `km_driven` : Total distance traveled by the car (in km).                   
+- `price` : Selling price of the car (target variable).
+
+</details>
 
 <hr>
 
@@ -590,7 +610,11 @@ Once the FastAPI server is running, you can test the API endpoints in Postman or
 <img title="postman-ui" src="https://github.com/user-attachments/assets/deccef9b-ab45-4b7c-80ad-ec5fe0844e81">
 
 ### 2. Using GET and POST Methods in Postman
-#### → GET Method
+
+<details>
+<summary>Click Here for details about GET Method</summary>
+
+#### GET Method
 - Retrieve information from the server without modifying any data.
 #### → Steps
 - Open Postman and create a new request.
@@ -614,7 +638,12 @@ http://127.0.0.1:8000
 
 <img title="postman-get" src="https://github.com/user-attachments/assets/aaadad27-2074-4009-beae-35d36c82378d">
 
-#### → POST Method
+</details>
+
+<details>
+<summary>Click Here for details about POST Method</summary>
+
+#### POST Method
 - Send data to a server to create/update a resource.
 #### → Steps
 - Open Postman and create a new request.
@@ -652,6 +681,8 @@ http://127.0.0.1:8000/predict
 ```
 
 <img title="postman-post" src="https://github.com/user-attachments/assets/dfece1cc-37a5-4079-a0a1-a84a0f074c02">
+
+</details>
 
 <hr>
 
@@ -797,7 +828,7 @@ docker run --env-file .env -p 8000:8000 your_image_name /
 docker run --env-file .env -p 8000:8000 your_image_name
 ```
 
-- After the container starts, you can access your API.
+After the container starts, you can access your API.
 
 ```bash
 http://localhost:8000
@@ -811,9 +842,8 @@ http://127.0.0.1:8000
 - Once your Docker image is ready, you can push it to Docker Hub.
 - It allows anyone to pull and run it without building it themselves.
 
-Access the Docker Hub [here](https://hub.docker.com/r/themrityunjaypathak/autoiq) or Click on the Image below.
-
-<a href="https://hub.docker.com/r/themrityunjaypathak/autoiq"><img title="docker-hub" src="https://github.com/user-attachments/assets/b98b5b6b-e013-47fd-9b64-73616309b85c"></a>
+<details>
+<summary>Click Here for steps to Push to Docker Hub</summary>
 
 #### Login to Docker Hub
 - Prompts you to enter your Docker Hub username and password.
@@ -838,6 +868,12 @@ docker tag your_image_name your-dockerhub-username/your_image_name:latest
 ```bash
 docker push your-dockerhub-username/your_image_name:latest
 ```
+
+</details>
+
+Access the Docker Hub [here](https://hub.docker.com/r/themrityunjaypathak/autoiq) or Click on the Image below.
+
+<a href="https://hub.docker.com/r/themrityunjaypathak/autoiq"><img title="docker-hub" src="https://github.com/user-attachments/assets/b98b5b6b-e013-47fd-9b64-73616309b85c"></a>
 
 ### 8. Pull and Run Anywhere
 - Once pushed, anyone can pull your image from Docker Hub and run it.
@@ -909,42 +945,48 @@ The frontend application files are in the project root :
 - `style.css` → This file handles the visual appearance of the web page.
 - `script.js` → This file communicates between the web page and the API.
 
-You can open `index.html` directly in your browser or serve it via a local HTTP server (like VS Code Live Server).
+<details>
+<summary>Click Here for more Details</summary>
+&nbsp;
 
-> [!NOTE]  
-> Remember to update the API URL in `script.js` when deploying on GitHub Pages to get real-time predictions.  
->  
-> Change from :  
-> ```js
-> const fetchPromise = fetch("http://127.0.0.1:8000/predict", {
->     method: "POST",
->     headers: { "Content-Type": "application/json" },
->     body: JSON.stringify(data),
-> });
-> ```  
->  
-> To :  
-> ```js
-> const fetchPromise = fetch("https://your_api_name.onrender.com/predict", {
->     method: "POST",
->     headers: { "Content-Type": "application/json" },
->     body: JSON.stringify(data),
-> });
-> ```
+Remember to update the API URL in `script.js` when deploying on GitHub Pages to get real-time predictions.  
+
+Change from :  
+```js
+const fetchPromise = fetch("http://127.0.0.1:8000/predict", {
+     method: "POST",
+     headers: { "Content-Type": "application/json" },
+     body: JSON.stringify(data),
+ });
+```  
+  
+ To :  
+ ```js
+ const fetchPromise = fetch("https://your_api_name.onrender.com/predict", {
+     method: "POST",
+     headers: { "Content-Type": "application/json" },
+     body: JSON.stringify(data),
+ });
+```
+
+</details>
+
+<details>
+<summary>Click Here for an Important Note</summary>
+&nbsp;
+
+- The API for this project is deployed using the free tier on Render.
+- As a result, it may go to sleep after periods of inactivity.
+- Please start the API first by visiting the API URL. Then, navigate to the website to make predictions.
+- If the API was inactive, the first prediction may take a few seconds while the server spins back up.
+
+</details>
+
+You can open `index.html` directly in your browser or serve it via a local HTTP server (like VS Code Live Server).
 
 Access the live Website [here](https://themrityunjaypathak.github.io/AutoIQ/) or Click on the Image below.
 
 <a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="frontend-ui" src="https://github.com/user-attachments/assets/881e47b3-85f2-4cbf-b063-3e9e81c68b5f"></a>
-
-> [!IMPORTANT]
->
-> The API for this project is deployed using the free tier on Render.
->
-> As a result, it may go to sleep after periods of inactivity.
-> 
-> Please start the API first by visiting the API URL. Then, navigate to the website to make predictions.
-> 
-> If the API was inactive, the first prediction may take a few seconds while the server spins back up.
 
 <hr>
 
@@ -1062,6 +1104,10 @@ for name, model in models.items():
 ```
 </details>
 
+<details>
+<summary>Click Here to view Analysis</summary>
+&nbsp;
+
 ```
 Model : LR
 ----------------------------------------
@@ -1106,34 +1152,9 @@ Average R2-Score : 0.86
 Standard Deviation of R2-Score : 0.02
 ```
 
-<details>
-<summary>Click Here to view Code Snippet</summary>
-<br>
-
-```python
-# Plotting Metric Comparision Graph
-results_df = pd.DataFrame(results)
-
-fig, ax = plt.subplots(ncols=1, nrows=2, figsize=(12,8))
-
-sns.barplot(x=results_df.iloc[0,:].sort_values().index.to_list(), y=results_df.iloc[0,:].sort_values().values, ax=ax[0])
-ax[0].set_title('Average Error Comparision (Lower is Better)')
-ax[0].set_ylabel('Error')
-for container in ax[0].containers:
-    ax[0].bar_label(container, fmt='%.0f')
-
-sns.barplot(x=results_df.iloc[1,:].sort_values().index.to_list(), y=results_df.iloc[1,:].sort_values().values, ax=ax[1])
-ax[1].set_title('Average R2-Score Comparision (Higher is Better)')
-ax[1].set_ylabel('R2-Score')
-for container in ax[1].containers:
-    ax[1].bar_label(container, fmt='%.2f')
-
-plt.tight_layout()
-plt.show()
-```
-</details>
-
 <img title="model-comparison" src="https://github.com/user-attachments/assets/79fc4a22-1d71-4c63-8eaf-b40c19c8e936">
+
+</details>
 
 ### 5. Creating Stacking Regressor
 
@@ -1169,6 +1190,10 @@ print(f"Standard Deviation of R2-Score : {cv_results['test_r2'].std():.2f}")
 ```
 </details>
 
+<details>
+<summary>Click Here to view Analysis</summary>
+&nbsp;
+
 ```
 Average Error : 87885.34
 Standard Deviatacion of Error : 1279.54
@@ -1178,16 +1203,32 @@ Standard Deviation of R2-Score : 0.01
 
 <img title="stacking-regressor" src="https://github.com/user-attachments/assets/758c669c-bdb8-4423-8ee8-565cf1158481">
 
+</details>
+
 ### 6. Performance Evaluation Graphs
 
 #### Actual vs Predicted Plot
+
+<details>
+<summary>Click Here to view Analysis</summary>
+&nbsp;
+
 | <img title="ap-plot" src="https://github.com/user-attachments/assets/a97fb07b-2442-424d-b0b1-fcb1f5a75390"> | <img title="ap-plot" src="https://github.com/user-attachments/assets/c0949198-ef58-4c0d-a280-4470c455bb90"> |
 |---|---|
 
+</details>
+
 #### Learning Curve
+
+<details>
+<summary>Click Here to view Analysis</summary>
+&nbsp;
+
 | R2-Score Curve | Error Curve |
 |---|---|
 | <img title="lr-curve" src="https://github.com/user-attachments/assets/56912d24-f2a6-4c3b-95ce-a0489fa1652a"> | <img title="lr-curve" src="https://github.com/user-attachments/assets/4fb325ac-90f8-4420-839e-6fdc187bbbf8"> |
+
+</details>
 
 ### 7. Hyperparameter Tuning
 
@@ -1229,11 +1270,23 @@ best_model = rcv.best_estimator_
 ### 8. Performance Evaluation Comparison
 
 #### Actual vs Predicted Plot
+
+<details>
+<summary>Click Here to view Analysis</summary>
+&nbsp;
+
 | Before Tuning | After Tuning |
 |---|---|
 | <img title="ap-plot" src="https://github.com/user-attachments/assets/3e2f14b3-3df8-42b0-b686-93fe5ef56a76"> | <img title="ap-plot" src="https://github.com/user-attachments/assets/65f3d99b-e50c-4423-9531-f0d78274868d"> |
 
-#### Learning Curve
+</details>
+
+#### Learning Curves
+
+<details>
+<summary>Click Here to view Analysis</summary>
+&nbsp;
+
 | R2-Score Curve (Before Tuning) | R2-Score Curve (After Tuning) |
 |---|---|
 | <img title="lr-curve" src="https://github.com/user-attachments/assets/df3db351-a715-4558-ba8b-0c146c1b5233"> | <img title="lr-curve" src="https://github.com/user-attachments/assets/e3f814e9-aac1-4fa3-8813-9114d14fcf7f"> |
@@ -1241,6 +1294,8 @@ best_model = rcv.best_estimator_
 | Error Curve (Before Tuning) | Error Curve (After Tuning) |
 |---|---|
 | <img title="lr-curve" src="https://github.com/user-attachments/assets/b1489435-ae46-495a-831b-4f354ef9ec57"> | <img title="lr-curve" src="https://github.com/user-attachments/assets/8afc7961-67cd-43ee-9541-4197871c7156"> |
+
+</details>
 
 <hr>
 
@@ -1316,29 +1371,6 @@ best_model = rcv.best_estimator_
 - This allows the project to run consistently on any system with [Docker](https://www.docker.com/) installed.
 - It eliminates dependency mismatches and OS-specific issues.
 - Same Docker image can be used to deploy on Render, Docker Hub or run locally with a single docker command.
-
-<hr>
-
-## Impact
-
-### End-to-End Deployment  
-- Built and deployed an end-to-end ML pipeline using FastAPI to serve real-time used car price predictions.  
-
-### Dataset Optimization  
-- Reduced dataset memory usage by 90%, improving pipeline efficiency and lowering storage needs.  
-- Converted data to Parquet, reducing load time and speeding up processing.  
-
-### Data-Driven Model Selection
-- Evaluated multiple regression models using cross-validation for fair comparison.
-- Selected the best-performing model(s) to improve prediction accuracy and consistency.
-
-### Significant Performance Gains
-- Achieved 30% lower MAE and 12% higher R2 score, improving prediction quality.
-- Better accuracy helped support more competitive and confident pricing decisions.
-
-### Greater Prediction Reliability  
-- Reduced prediction error variance by 70%, ensuring stable and reliable predictions.  
-- More consistent predictions reduced pricing mistakes and built customer trust.
 
 <hr>
 
