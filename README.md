@@ -1,37 +1,30 @@
 <h2 align='center'>AutoIQ : Used Car Pricing System</h2>
 
 <p align="center">
-  <!-- Live Demo -->
   <a href="https://themrityunjaypathak.github.io/AutoIQ/" target="_blank">
     <img src="https://img.shields.io/badge/Live%20Demo-Website-E34F26?style=flat&logo=html5&logoColor=white" />
   </a>
   
-  <!-- Python -->
   <a href="https://www.python.org/" target="_blank">
     <img src="https://img.shields.io/badge/Python-v3.11-3776AB?style=flat&logo=python&logoColor=white" />
   </a>
 
-  <!-- Pandas -->
   <a href="https://pandas.pydata.org/" target="_blank">
     <img src="https://img.shields.io/badge/Pandas-v2.3-150458?style=flat&logo=pandas&logoColor=white" />
   </a>
 
-  <!-- Scikit-learn -->
   <a href="https://scikit-learn.org/stable/" target="_blank">
     <img src="https://img.shields.io/badge/scikit--learn-v1.7-F7931E?style=flat&logo=scikit-learn&logoColor=white" />
   </a>
 
-  <!-- FastAPI -->
   <a href="https://autoiq.onrender.com/docs" target="_blank">
     <img src="https://img.shields.io/badge/FastAPI-v0.116-009688?style=flat&logo=fastapi&logoColor=white" />
   </a>
 
-  <!-- Docker -->
   <a href="https://hub.docker.com/r/themrityunjaypathak/autoiq" target="_blank">
     <img src="https://img.shields.io/badge/Docker-v29.1-2496ED?style=flat&logo=docker&logoColor=white" />
   </a>
 
-  <!-- Git -->
   <a href="https://git-scm.com/" target="_blank">
     <img src="https://img.shields.io/badge/Git-v2.47-F05032?style=flat&logo=git&logoColor=white" />
   </a>
@@ -65,125 +58,28 @@
 
 ## Overview
 - Built and deployed an end-to-end machine learning pipeline to predict used car prices from real-world data.
-- Collected and cleaned 2,800+ used car records from Cars24 using Selenium and BeautifulSoup.
+- Collected and cleaned 2,800+ used car listings from Cars24 using Selenium and BeautifulSoup.
 - Optimized dataset memory usage by 90% through downcasting data types and converting to Parquet format.
 - Trained models with Scikit-learn Pipelines & ColumnTransformer to avoid data leakage.
 - Deployed the machine learning model as an API using FastAPI on Render.
-- Built a HTML/CSS/JS frontend hosted on GitHub Pages to interact with the REST API and display predictions.
+- Built an HTML/CSS/JS frontend hosted on GitHub Pages to interact with the REST API and display predictions.
 - Containerized the entire application using Docker and pushed to Docker Hub for reproducibility.
 
 <hr>
 
 ## Workflow
 
-```mermaid
-flowchart TB
-
-  %% =========================
-  %% 1) DATA COLLECTION
-  %% =========================
-  subgraph S1["1) Data Collection"]
-    direction TB
-    A1["Cars24 Website"] --> A2["Scraping Notebook<br/>scrape_code.ipynb"]
-    A2 --> A3["Raw Dataset<br/>scraped_data.csv"]
-  end
-
-  %% =========================
-  %% 2) DATA PREPROCESSING + EDA
-  %% =========================
-  subgraph S2["2) Data Processing"]
-    direction TB
-    B1["Load Raw CSV<br/>pd.read_csv()"]
-    B2["Cleaning & Preprocessing<br/>Handle Nulls, Format Columns, Fix Types"]
-    B3["Save Cleaned Dataset<br/>clean_data.parquet"]
-
-    B4["Exploratory Data Analysis<br/>Feature Understanding, Trends, Distributions"]
-    B5["Save Dataset after EDA<br/>clean_data_after_eda.parquet"]
-
-    B6["Outlier Removal<br/>IQR/Rules-based Filtering"]
-    B7["Final Training Dataset<br/>clean_data_with_no_outlier.parquet"]
-
-    A3 --> B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7
-  end
-
-  %% =========================
-  %% 3) MODEL TRAINING
-  %% =========================
-  subgraph S3["3) Model Training"]
-    direction TB
-    C1["Train Multiple Regression Models"]
-    C2["Model Optimization with<br/>Hyperparameter Tuning"]
-    C3["Select Best Model<br/>based on MAE & R2 score"]
-    C4["Serialize Model Artifact<br/>as model.pkl"]
-
-    B7 --> C1 --> C2 --> C3 --> C4
-  end
-
-  %% =========================
-  %% 4) MODEL SERVING API
-  %% =========================
-  subgraph S4["4) Model Serving"]
-    direction TB
-    D1["FastAPI App<br/>loads model.pkl"]
-    D2["Endpoints"]
-    D2a["GET /<br/>Root"]
-    D2b["GET /health<br/>Health Check"]
-    D2c["POST /predict<br/>Returns Price Prediction"]
-
-    C4 --> D1 --> D2
-    D2 --> D2a
-    D2 --> D2b
-    D2 --> D2c
-
-    D3["Deployment<br/>Render Cloud"]
-    D1 --> D3
-  end
-
-  %% =========================
-  %% 5) CONTAINERIZATION
-  %% =========================
-  subgraph S5["5) Containerization"]
-    direction TB
-    E1["Dockerfile with<br/>Multi-stage Build"]
-    E2["Build Docker Image<br/>API + Model + Dependencies"]
-    E3["Push Image to Docker Hub<br/>for reuse & deployment"]
-
-    D1 --> E1 --> E2 --> E3
-  end
-
-  %% =========================
-  %% 6) FRONTEND INTEGRATION
-  %% =========================
-  subgraph S6["6) Frontend Integration"]
-    direction TB
-    F1["Frontend UI<br/>HTML/CSS/JS"]
-    F2["User enters car details<br/>as JSON Payload"]
-    F3["POST request to /predict<br/>endpoint deployed on Render"]
-    F4["Prediction displayed<br/>on the Website"]
-
-    F1 --> F2 --> F3 --> F4
-    D3 --> F3
-  end
-
-  %% =========================
-  %% Minimal dark styling (GitHub-safe)
-  %% =========================
-  classDef block fill:#0d1117,stroke:#30363d,stroke-width:1px,color:#ffffff;
-  classDef step  fill:#161b22,stroke:#8b949e,stroke-width:1px,color:#ffffff;
-
-  class S1,S2,S3,S4,S5,S6 block;
-  class A1,A2,A3,B1,B2,B3,B4,B5,B6,B7,C1,C2,C3,C4,D1,D2,D2a,D2b,D2c,D3,E1,E2,E3,F1,F2,F3,F4 step;
-```
+[![](https://mermaid.ink/img/pako:eNqdVwtv2zYQ_iuEig4JyjjWw4-4WwFZj8RFYnuW2wFdBoOW6FiILGkklcQt-t93JCXbDdq0npFAFsk73n3fd0f6ixEXCTUGxiorHuM1YQLNh7f5bY7Q69fojx996nnzFPnu3EXe5Po68OajyfhXDHm1vGOkXKPI_PvWMFvIJ4Igr8gyGou0yG-Nf-QyhJKU6REVkxxxpYVHGLcc9Bdd8lRQWI3Ozt4h14KpKAbHaX6HxoWgy6K4_33Jzt-dcDlMFzLVVlpu8-Xpbg_X0tY2WM_Io4qFU3FolywSGGzF_KExo3nyyxhZNUbTWTCdTbwgikbjS_QGBb57HFgyP6sGa8qKmHIOmb4A1lCCdV2QBMnEvOijSqpMWoySZAHpnOxhGErvXkZJLtH7DTag5W4PDcYVyZOMonGVZRyjsGAbIiRr1SaX7-kTmm9Lyg98Skwj8kCRckyTb8GN5aCGtiTs34oKbVobO2AcPJVZwYgo2Fbn7eYk2_KUaw8hJaJiFH3IE8q4gPggWIzmDPiBkPyUC5YuKwnKYVidJqw6HERWgjJJyPPAFmpmQZPvh9gFR5NKZClYz-imeCCZ8jD6c3Y-qzLKz5bgPwFsMnBzSNawB6ZhCtlAtCRVoP8AnMVjKtaLvFgUeqfvReLaSsRDUz-0pIf1oKMfHf3o6kfvWBnbp-hm4gfXaD5zR2OQ8HHilVKwW-gGKnCf8gva9aR21Tp0U2UiLUF5M3rHpCBhmfLDd_aeVK_2PSlFukk_E-VNQqfwvAJlMgCObKikel59s72nhEpl-0FDyoV2rww1gXJHN4CymFmIxwWje1NHmbKUZOlniqZpSbM0p8hlIl2RWLNJOCpholXeZ4fy6SkqPE2ap0nzNGmecyw_TsNPFMw-yg7jTkfHUSQzcRqKIKWHlxnyJUMh4QI2Qm5Zqkwz6DbPklVrJT9BnpRFmgt-MExg_DKYo5PzU2U_KwpxML3cTa8pycRaL7pS35G3pvH9weIYFk8nkVxdMpqksah9UmgSOYeWlsZUNjY51RwzDYsKdV9T4VuNy_qVPHtfPnuPGz--FJJPoWltNzQXoJs6AtmgoAsWVbIPuN7MPpbpzimct-M5VGEwG31yjz91Zf_rtKB15wLqC7Srq-UFrgPJtV_E95StUqjEXV2p2jyD1ntH0bBKs316gaRcDSFtiEYbWKW7m5TMm1ppbxAAJgHK4_Tw9AgkltOKr7UhEkXj6KpaKjergiFGK06hMJMd6Ae01hAH9UPTFRwNePcUhTNAPBj7aASPy9n_AF2eFd0WChmgDpujETxg6ifAh6rIGpsPI63_-c31uRdF5--jnWko4f7AAR2AAA5DBJckAAUIznjTg95HkzGakq0s0r2h3ZQNo3CsQPPjUrmAdlNFypzWxStboZbz3oNsHPuygix4mZEtTZQhDIg1PbisNeSEmpVQsxLqvhc6TSHVo8dydQMHywZO1YSwe8TFNpMn68llKkA0Z5ys6OmvOIozwrlPV2iZgeQQaD4bvGonpmn2MNwpins6eGW37a6d1K9nj2ki1gOrfMJxAVeWwauV-rz9xhsXtES1N7NrLi1r562_vHAu6M-97fzB5RlHFo5sHDk46uCoq4Pd7wiXZexa2LXx0MRDCw_hi4OHHTzs4mEPeyb2LOzZ2HOwb2Lfgj8C_0v4j7Fv48DEgYUDG4cmDi0cwhdHpfDWwMYdSxNjIFhFsbGhcBWUr8YXufmtAYRvgOoBfJU83Bq3-VewKUn-qSg2jRkrqru1MViRjMNbVcJlh_opgaLY7EaZkppXVLkwBoC3o7wYgy_GkzGwnHbL6XWtXqdtWWbf7FvY2BqDM7Pfbzm25fS7Zv-i3223za_Y-Kx2tlpm17Y6_U6v3bZ63Ys-NkC3cL-80b-C1I-hr_8BcF3lbg?type=png)](https://mermaid.live/edit#pako:eNqdVwtv2zYQ_iuEig4JyjjWw4-4WwFZj8RFYnuW2wFdBoOW6FiILGkklcQt-t93JCXbDdq0npFAFsk73n3fd0f6ixEXCTUGxiorHuM1YQLNh7f5bY7Q69fojx996nnzFPnu3EXe5Po68OajyfhXDHm1vGOkXKPI_PvWMFvIJ4Igr8gyGou0yG-Nf-QyhJKU6REVkxxxpYVHGLcc9Bdd8lRQWI3Ozt4h14KpKAbHaX6HxoWgy6K4_33Jzt-dcDlMFzLVVlpu8-Xpbg_X0tY2WM_Io4qFU3FolywSGGzF_KExo3nyyxhZNUbTWTCdTbwgikbjS_QGBb57HFgyP6sGa8qKmHIOmb4A1lCCdV2QBMnEvOijSqpMWoySZAHpnOxhGErvXkZJLtH7DTag5W4PDcYVyZOMonGVZRyjsGAbIiRr1SaX7-kTmm9Lyg98Skwj8kCRckyTb8GN5aCGtiTs34oKbVobO2AcPJVZwYgo2Fbn7eYk2_KUaw8hJaJiFH3IE8q4gPggWIzmDPiBkPyUC5YuKwnKYVidJqw6HERWgjJJyPPAFmpmQZPvh9gFR5NKZClYz-imeCCZ8jD6c3Y-qzLKz5bgPwFsMnBzSNawB6ZhCtlAtCRVoP8AnMVjKtaLvFgUeqfvReLaSsRDUz-0pIf1oKMfHf3o6kfvWBnbp-hm4gfXaD5zR2OQ8HHilVKwW-gGKnCf8gva9aR21Tp0U2UiLUF5M3rHpCBhmfLDd_aeVK_2PSlFukk_E-VNQqfwvAJlMgCObKikel59s72nhEpl-0FDyoV2rww1gXJHN4CymFmIxwWje1NHmbKUZOlniqZpSbM0p8hlIl2RWLNJOCpholXeZ4fy6SkqPE2ap0nzNGmecyw_TsNPFMw-yg7jTkfHUSQzcRqKIKWHlxnyJUMh4QI2Qm5Zqkwz6DbPklVrJT9BnpRFmgt-MExg_DKYo5PzU2U_KwpxML3cTa8pycRaL7pS35G3pvH9weIYFk8nkVxdMpqksah9UmgSOYeWlsZUNjY51RwzDYsKdV9T4VuNy_qVPHtfPnuPGz--FJJPoWltNzQXoJs6AtmgoAsWVbIPuN7MPpbpzimct-M5VGEwG31yjz91Zf_rtKB15wLqC7Srq-UFrgPJtV_E95StUqjEXV2p2jyD1ntH0bBKs316gaRcDSFtiEYbWKW7m5TMm1ppbxAAJgHK4_Tw9AgkltOKr7UhEkXj6KpaKjergiFGK06hMJMd6Ae01hAH9UPTFRwNePcUhTNAPBj7aASPy9n_AF2eFd0WChmgDpujETxg6ifAh6rIGpsPI63_-c31uRdF5--jnWko4f7AAR2AAA5DBJckAAUIznjTg95HkzGakq0s0r2h3ZQNo3CsQPPjUrmAdlNFypzWxStboZbz3oNsHPuygix4mZEtTZQhDIg1PbisNeSEmpVQsxLqvhc6TSHVo8dydQMHywZO1YSwe8TFNpMn68llKkA0Z5ys6OmvOIozwrlPV2iZgeQQaD4bvGonpmn2MNwpins6eGW37a6d1K9nj2ki1gOrfMJxAVeWwauV-rz9xhsXtES1N7NrLi1r562_vHAu6M-97fzB5RlHFo5sHDk46uCoq4Pd7wiXZexa2LXx0MRDCw_hi4OHHTzs4mEPeyb2LOzZ2HOwb2Lfgj8C_0v4j7Fv48DEgYUDG4cmDi0cwhdHpfDWwMYdSxNjIFhFsbGhcBWUr8YXufmtAYRvgOoBfJU83Bq3-VewKUn-qSg2jRkrqru1MViRjMNbVcJlh_opgaLY7EaZkppXVLkwBoC3o7wYgy_GkzGwnHbL6XWtXqdtWWbf7FvY2BqDM7Pfbzm25fS7Zv-i3223za_Y-Kx2tlpm17Y6_U6v3bZ63Ys-NkC3cL-80b-C1I-hr_8BcF3lbg)
 
 <hr>
 
 ## Impact
-- Improved model performance with 30% lower MAE and 12% higher R2 score compared to the baseline model.
-- Increased prediction reliability by reducing error variance by 70%, delivering more stable price estimates.
+- Achieved a 30% lower MAE and a 12% higher R2 score compared to the baseline regression model.
+- Reduced prediction error variance by 70%, ensuring more stable and reliable predictions.
 - Optimized data processing by reducing dataset memory usage by 90%, improving training speed and efficiency.
-- Deployed the trained ML model as a production-ready FastAPI service to serve real-time predictions.
-- Designed an interactive web interface that connects to the API and provides instant used car price estimates.
-- Ensured reproducibility and portability by containerizing the full ML pipeline using Docker.
+- Deployed the pipeline as a production-ready FastAPI service to serve real-time predictions.
+- Designed an interactive web interface that connects to the API and provides used car price estimates.
+- Ensured reproducibility and portability by containerizing the full machine learning pipeline using Docker.
 
 <hr>
 
@@ -571,11 +467,11 @@ docker run --env-file .env -p 8000:8000 your_image_name /
 ```
 
 > [!NOTE]
-> `api.main` → Refers to the main.py file inside the api folder.
+> `api.main` : Refers to the main.py file inside the api folder.
 > 
-> `app` → The FastAPI instance defined in your code.
+> `app` : The FastAPI instance defined in your code.
 > 
-> `--reload` → Automatically reloads when code changes (development only).
+> `--reload` : Automatically reloads when code changes (development only).
 
 ### 5. Access the FastAPI Server
 Once the container is running, open your browser and navigate to :
@@ -614,9 +510,9 @@ Once the FastAPI server is running, you can test the API endpoints in Postman or
 <details>
 <summary>Click Here for details about GET Method</summary>
 
-#### GET Method
+### GET Method
 - Retrieve information from the server without modifying any data.
-#### → Steps
+### Steps
 - Open Postman and create a new request.
 - Set the HTTP method to "GET" from the dropdown menu.
 - Enter the endpoint URL you want to query.
@@ -624,7 +520,7 @@ Once the FastAPI server is running, you can test the API endpoints in Postman or
 http://127.0.0.1:8000
 ```
 - Click the "Send" button to submit the request.
-#### → Expected Response
+### Expected Response
 - **Status Code :** It indicates that the request was successful and the server responded with the requested data.
 ```
 200 OK
@@ -643,16 +539,16 @@ http://127.0.0.1:8000
 <details>
 <summary>Click Here for details about POST Method</summary>
 
-#### POST Method
+### POST Method
 - Send data to a server to create/update a resource.
-#### → Steps
+### Steps
 - Open Postman and create a new request.
 - Set the HTTP method to "POST" from the dropdown menu.
 - Enter the endpoint URL you want to query.
 ```
 http://127.0.0.1:8000/predict
 ```
-- Navigate to the "Headers" tab and add the following : Key → `Content-Type`, Value → `application/json`
+- Navigate to the "Headers" tab and add the following : Key as `Content-Type`, Value as `application/json`
 - Go to the "Body" tab, Select "raw", then choose "JSON" from the format dropdown menu.
 - Enter the request payload in JSON format.
 ```json
@@ -668,7 +564,7 @@ http://127.0.0.1:8000/predict
 }
 ```
 - Click the "Send" button to submit the request.
-#### → Expected Response
+### Expected Response
 - **Status Code :** It indicates that the server successfully processed the request and generated a prediction.
 ```
 200 OK
@@ -692,12 +588,12 @@ Follow these steps carefully to containerize your project with Docker :
 
 ### 1. Install Docker
 - Before starting, make sure Docker is installed on your system.
-- Visit [Docker](https://www.docker.com/) → Click on Download Docker Desktop → Choose Windows / Mac / Linux
+- Visit [Docker](https://www.docker.com/) ➜ Click on Download Docker Desktop ➜ Choose Windows / Mac / Linux.
 
 <img title="docker" src="https://github.com/user-attachments/assets/200fd0a3-68f1-40d7-b1a7-299f0d6aae8e">
 
 ### 2. Verify the Installation
-- Open Docker Desktop → Make sure Docker Engine is Running
+- Open Docker Desktop ➜ Make sure Docker Engine is Running.
 
 <img title="docker-desktop" src="https://github.com/user-attachments/assets/5599f2fb-f1c1-4f0e-bc21-15fd31845270">
 
@@ -941,46 +837,40 @@ Follow these steps carefully to deploy your FastAPI application on Render :
 ## Application
 
 The frontend application files are in the project root :
-- `index.html` → This file defines the structure and layout of the web page.
-- `style.css` → This file handles the visual appearance of the web page.
-- `script.js` → This file communicates between the web page and the API.
+- `index.html` : This file defines the structure and layout of the web page.
+- `style.css` : This file handles the visual appearance of the web page.
+- `script.js` : This file communicates between the web page and the REST API.
 
-<details>
-<summary>Click Here for more Details</summary>
-&nbsp;
+> [!IMPORTANT]
+> Remember to update the API URL in `script.js` when deploying on GitHub Pages to get real-time predictions.  
+>
+> Change from :  
+> ```js
+> const fetchPromise = fetch("http://127.0.0.1:8000/predict", {
+>      method: "POST",
+>      headers: { "Content-Type": "application/json" },
+>      body: JSON.stringify(data),
+> });
+> ```  
+>   
+> To :  
+> ```js
+> const fetchPromise = fetch("https://your_api_name.onrender.com/predict", {
+>     method: "POST",
+>     headers: { "Content-Type": "application/json" },
+>     body: JSON.stringify(data),
+> });
+> ```
 
-Remember to update the API URL in `script.js` when deploying on GitHub Pages to get real-time predictions.  
-
-Change from :  
-```js
-const fetchPromise = fetch("http://127.0.0.1:8000/predict", {
-     method: "POST",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify(data),
- });
-```  
-  
- To :  
- ```js
- const fetchPromise = fetch("https://your_api_name.onrender.com/predict", {
-     method: "POST",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify(data),
- });
-```
-
-</details>
-
-<details>
-<summary>Click Here for an Important Note</summary>
-&nbsp;
-
-- The API for this project is deployed using the free tier on Render.
-- As a result, it may go to sleep after periods of inactivity.
-- Please start the API first by visiting the API URL. Then, navigate to the website to make predictions.
-- If the API was inactive, the first prediction may take a few seconds while the server spins back up.
-
-</details>
+> [!NOTE]
+>
+> The API for this project is deployed using the free tier on Render.
+>
+> As a result, it may go to sleep after periods of inactivity.
+> 
+> Please start the API first by visiting the API URL. Then, navigate to the website to make predictions.
+> 
+> If the API was inactive, the first prediction may take a few seconds while the server spins back up.
 
 You can open `index.html` directly in your browser or serve it via a local HTTP server (like VS Code Live Server).
 
@@ -1006,6 +896,8 @@ cars.head()
 ```
 </details>
 
+<hr>
+
 ### 2. Split the Data
 
 <details>
@@ -1021,6 +913,8 @@ y = cars['price']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 ```
 </details>
+
+<hr>
 
 ### 3. Build Preprocessing Pipeline
 
@@ -1059,6 +953,8 @@ ctf = ColumnTransformer(transformers=[
 ], remainder='passthrough', n_jobs=-1)
 ```
 </details>
+
+<hr>
 
 ### 4. Evaluate Multiple Models
 
@@ -1156,6 +1052,8 @@ Standard Deviation of R2-Score : 0.02
 
 </details>
 
+<hr>
+
 ### 5. Creating Stacking Regressor
 
 <details>
@@ -1205,6 +1103,8 @@ Standard Deviation of R2-Score : 0.01
 
 </details>
 
+<hr>
+
 ### 6. Performance Evaluation Graphs
 
 #### Actual vs Predicted Plot
@@ -1229,6 +1129,8 @@ Standard Deviation of R2-Score : 0.01
 | <img title="lr-curve" src="https://github.com/user-attachments/assets/56912d24-f2a6-4c3b-95ce-a0489fa1652a"> | <img title="lr-curve" src="https://github.com/user-attachments/assets/4fb325ac-90f8-4420-839e-6fdc187bbbf8"> |
 
 </details>
+
+<hr>
 
 ### 7. Hyperparameter Tuning
 
@@ -1266,6 +1168,8 @@ rcv.fit(X_train, y_train)
 best_model = rcv.best_estimator_
 ```
 </details>
+
+<hr>
 
 ### 8. Performance Evaluation Comparison
 
@@ -1379,7 +1283,7 @@ best_model = rcv.best_estimator_
 ```
 AutoIQ/
 |
-├── api/                      # FastAPI Code for making Predictions
+├── api/                      # FastAPI Code to deploy API on Render
 │   ├── main.py              
 │   └── config.py            
 │
