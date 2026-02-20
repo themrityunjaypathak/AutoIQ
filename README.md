@@ -1,34 +1,16 @@
 <h2 align='center'>AutoIQ : Used Car Pricing System</h2>
 
-<p align="center">
-  <a href="https://themrityunjaypathak.github.io/AutoIQ/" target="_blank">
-    <img src="https://img.shields.io/badge/Live%20Demo-Website-E34F26?style=flat&logo=html5&logoColor=white" />
-  </a>
-  
-  <a href="https://www.python.org/" target="_blank">
-    <img src="https://img.shields.io/badge/Python-v3.11-3776AB?style=flat&logo=python&logoColor=white" />
-  </a>
+<div align="center">
 
-  <a href="https://pandas.pydata.org/" target="_blank">
-    <img src="https://img.shields.io/badge/Pandas-v2.3-150458?style=flat&logo=pandas&logoColor=white" />
-  </a>
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Website-E34F26?style=flat&logo=html5&logoColor=white)](https://themrityunjaypathak.github.io/AutoIQ/)
+[![Python](https://img.shields.io/badge/Python-v3.11-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![Pandas](https://img.shields.io/badge/Pandas-v2.3-150458?style=flat&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-v1.7-F7931E?style=flat&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/stable/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-v0.116-009688?style=flat&logo=fastapi&logoColor=white)](https://autoiq.onrender.com/docs)
+[![Docker](https://img.shields.io/badge/Docker-v29.1-2496ED?style=flat&logo=docker&logoColor=white)](https://hub.docker.com/r/themrityunjaypathak/autoiq)
+[![Git](https://img.shields.io/badge/Git-v2.47-F05032?style=flat&logo=git&logoColor=white)](https://git-scm.com/)
 
-  <a href="https://scikit-learn.org/stable/" target="_blank">
-    <img src="https://img.shields.io/badge/scikit--learn-v1.7-F7931E?style=flat&logo=scikit-learn&logoColor=white" />
-  </a>
-
-  <a href="https://autoiq.onrender.com/docs" target="_blank">
-    <img src="https://img.shields.io/badge/FastAPI-v0.116-009688?style=flat&logo=fastapi&logoColor=white" />
-  </a>
-
-  <a href="https://hub.docker.com/r/themrityunjaypathak/autoiq" target="_blank">
-    <img src="https://img.shields.io/badge/Docker-v29.1-2496ED?style=flat&logo=docker&logoColor=white" />
-  </a>
-
-  <a href="https://git-scm.com/" target="_blank">
-    <img src="https://img.shields.io/badge/Git-v2.47-F05032?style=flat&logo=git&logoColor=white" />
-  </a>
-</p>
+</div>
 
 <a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="AutoIQ by Motor.co" src="https://github.com/user-attachments/assets/e34c618f-2773-4a1c-b632-9c822338918b"></a>
 
