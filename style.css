@@ -1,50 +1,52 @@
-/*Body Section*/
-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    margin: 0 auto;
-    font-family: "Josefin Sans", sans-serif;
-    background-color: #D8D8FF;
+/* Global CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/*Navbar Section*/
+/* Body Section */
+body {
+    font-family: "Clash Display", sans-serif;
+    background-color: #FBEFEF;
+    color: #1A2421;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* Navbar Section */
 .navbar {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 8em;
     position: fixed;
-    margin-top: 12px;
-    top: 0;
-    height: 8%;
-    padding: 0 8px;
     text-align: center;
+    top: 0;
+    width: 100%;
+    padding: 12px 2%;
     font-size: medium;
-    background-color: white;
-    border: 1px solid rgb(190, 190, 190);
-    border-radius: 50px;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    background-color: #F9DFDF;
+    border-bottom: 1px solid #A6AEBF;
+    z-index: 99999;
 }
 
-/*Logo Section*/
+/* Logo Section */
 .logo {
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: center;
 }
 
 .logo img {
-    width: min-content;
-    height: 40px;
+    width: auto;
+    height: 30px;
 }
 
 .logo img:hover {
-    animation:  spin 2s infinite;
+    animation: spin 2s infinite;
     cursor: pointer;
 }
 
@@ -52,23 +54,22 @@ body {
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }
 }
 
-/*Menu Section*/
+/* Menu Section */
 .menu {
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 0.8em;
+    gap: 2em;
 }
 
 .menu a {
     text-decoration: none;
-    padding: 4px;
     color: #1A2421;
 }
 
@@ -76,22 +77,18 @@ body {
     color: #FE0A0B;
 }
 
-/*Login Button Section*/
+/* Login Button Section */
 .login-button {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    text-decoration: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    background-color: #FE0A0B;
+    color: white;
+    border-radius: 100px;
 }
 
-.login-button a {
-    text-decoration: none;
-    padding: 10px 12px;
-    cursor: pointer;
-    color: white;
-    background-color: #FE0A0B;
-    border: 2px solid #FE0A0B;
-    border-radius: 50px;
+.login-button i {
+    margin-left: 6px;
 }
 
 .login-button .fa-arrow-right {
@@ -99,55 +96,78 @@ body {
     transition: all 0.3s ease-in-out;
 }
 
-.login-button a:hover .fa-arrow-right{
+.login-button:hover .fa-arrow-right {
     transform: rotate(0deg);
 }
 
-/*Form Section*/
+/* Container Section */
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Form Section */
 .form {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    gap: 2em;
+    flex-wrap: wrap;
+    transform: translate(0%, 20%);
 }
 
-.hero-image img {
-    width: 650px;
-    height: auto;
-}
-
-.prediction {
+.hero-image {
+    flex: 1;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-/*Model Input Section*/
-.model-input {
+.hero-image img {
+    width: 100%;
+    min-width: 600px;
+    max-width: 650px;
+    height: auto;
+}
+
+.prediction {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    text-align: center;
-    min-width: 350px;
-    gap: 0.8em;
+    width: 500px;
+    max-width: 500px;
     padding: 12px;
-    color: #1A2421;
-    background-color: white;
-    border: 1px solid rgb(190, 190, 190);
+    background-color: #F9DFDF;
     border-radius: 12px;
+}
+
+/* Model Input Section */
+.form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    color: #1A2421;
+    border-radius: 12px;
+}
+
+.input-group {
+    width: 100%;
 }
 
 input[type="text"],
 input[type="number"],
 select {
-    font-family: "Josefin Sans", sans-serif;
+    width: 100%;
+    font-family: "Clash Display", sans-serif;
     font-size: medium;
     padding: 12px;
-    min-width: 200px;
-    border: 1px solid rgb(190, 190, 190);
+    background-color: white;
+    color: #1A2421;
+    border: 1px solid #A6AEBF;
     border-radius: 12px;
 }
 
@@ -159,12 +179,13 @@ select:focus {
 }
 
 .owner {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    min-width: 200px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    width: 100%;
+    border: none;
 }
 
 .owner input[type="radio"] {
@@ -175,134 +196,213 @@ select:focus {
     user-select: none;
     cursor: pointer;
     font-size: medium;
-    padding: 6px 10px;
+    text-align: center;
+    padding: 6px 0;
+    background-color: white;
     color: #1A2421;
-    border: 1px solid rgb(190, 190, 190);
-    border-radius: 50px;
+    border: 1px solid #A6AEBF;
+    border-radius: 12px;
     transition: 0.3s all ease-in-out;
 }
 
-.owner input[type="radio"]:checked + label {
-    color: white;
+.owner input[type="radio"]:checked+label {
     background-color: #FE0A0B;
+    color: white;
     border: 1px solid #FE0A0B;
 }
 
-input[type="range"] {
-    outline: none;
-    cursor: pointer;
-    margin: 0;
-    padding: 0;
-    min-width: 200px;
-    accent-color: #FE0A0B;
-    border: 1px solid rgb(190, 190, 190);
-    border-radius: 50px;
-}
-
-/*Button Section*/
+/* Button Section */
 .form-button {
     display: flex;
-    justify-content: space-between;
-    gap: 10px;
+    flex-direction: row;
+    gap: 12px;
 }
 
-.model-input button {
-    width: 100%;
+.form-button button {
+    user-select: none;
     cursor: pointer;
-    font-family: "Josefin Sans", sans-serif;
+    font-family: "Clash Display", sans-serif;
     font-size: medium;
-    padding: 10px 18px;
-    color: #1A2421;
+    text-align: center;
+    padding: 12px;
+    width: 100%;
     background-color: white;
-    border: 1px solid rgb(190, 190, 190);
-    border-radius: 100px;
+    color: #1A2421;
+    border: 1px solid #A6AEBF;
+    border-radius: 12px;
     transition: all 0.3s ease-in-out;
 }
 
-.model-input button:hover {
-    color: white;
+.form-button i {
+    margin-right: 6px;
+}
+
+.form-button button:hover {
     background-color: #FE0A0B;
+    color: white;
     border: 1px solid #FE0A0B;
 }
 
-/*Prediction Result*/
-.prediction-result {
-    font-size: large;
-    position: absolute;
-    bottom: 1.5em;
-    left: 50%;
-    padding: 0 14px;
+/* Prediction Result */
+.result-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    margin-top: 12px;
+    font-size: medium;
     color: #1A2421;
-    background-color: #E2E2FF;
-    border-radius: 12px;
-    transform: translateX(-50%);
+    word-wrap: break-word;
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    margin-top: 12px;
+    font-size: medium;
+    color: #1A2421;
+    word-wrap: break-word;
 }
 
 .loading i {
-    margin-right: 5px;
+    margin-right: 6px;
 }
 
 .result-success {
-    color: green;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    margin-top: 12px;
+    font-size: medium;
+    color: #0F7B21;
 }
 
 .result-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    margin-top: 12px;
+    font-size: medium;
     color: #FE0A0B;
 }
 
-/*Footer Section*/
-.footer {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    padding: 10px 15px;
+/* Responsive Section */
+
+/* Large Tablet / Small Laptop */
+@media (max-width: 1100px) {
+
+    .container {
+        padding: 0 20px;
+    }
+
+    .form {
+        flex-direction: column;
+        gap: 30px;
+        transform: translate(0, 120px);
+        padding-bottom: 30px;
+    }
+
+    .hero-image img {
+        min-width: 0;
+        max-width: 500px;
+    }
+
+    .prediction {
+        width: 100%;
+        max-width: 500px;
+    }
+
 }
 
-.footer p {
-    font-family: "Fugaz One", sans-serif;
-    font-size: x-large;
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    line-height: 0.5;
-    padding: 10px 15px;
-    color: #FE0A0B;
-}
-
-/*Responsive Section*/
-@media (max-width: 600px) {
+/* Tablet */
+@media (max-width: 768px) {
 
     .menu {
         display: none;
     }
 
     .navbar {
-        z-index: 999;
-        height: 55px;
+        padding: 12px 20px;
     }
 
-    .hero-image {
-        display: none;
+    .form {
+        flex-direction: column;
+        gap: 30px;
+        transform: translate(0, 110px);
+        padding-bottom: 30px;
     }
 
-    .model-input {
+    .hero-image img {
+        min-width: 0;
+        max-width: 420px;
+    }
+
+    .prediction {
         width: 100%;
-        max-width: 60px;
+        max-width: 450px;
+    }
+
+    .owner {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .container {
+        padding: 0 16px;
+    }
+
+    .form {
+        flex-direction: column;
+        gap: 24px;
+        transform: translate(0, 100px);
+        padding-bottom: 30px;
+    }
+
+    .hero-image img {
+        max-width: 400px;
+    }
+
+    .prediction {
+        max-width: 450px;
+    }
+
+    .owner {
+        grid-template-columns: repeat(4, 1fr);
     }
 
     .owner label {
         font-size: small;
-        padding: 8px 6px;
     }
 
-    .prediction-result {
-        font-size: medium;
-        bottom: 0.6em;
-        width: 70%;
+    .form-button {
+        flex-direction: row;
     }
 
-    .footer {
-        display: none;
+    .form-button button {
+        font-size: small;
+    }
+
+    .result-box,
+    .loading,
+    .result-success,
+    .result-error {
+        font-size: small;
     }
 
 }

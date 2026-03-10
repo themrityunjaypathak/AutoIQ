@@ -14,7 +14,7 @@ function resetForm() {
     document.getElementById("owner1").checked = true;
 
     const result = document.getElementById("result");
-    result.className = "initial-message";
+    result.className = "result-box";
     result.textContent = "Please fill the form to get the estimated value of your car.";
 }
 
@@ -147,15 +147,15 @@ async function predict() {
 
         const delayPromise = new Promise(resolve => setTimeout(resolve, 1500));
         const [result] = await Promise.all([fetchPromise, delayPromise]);
-        
+
         resultElement.className = "result-success";
         resultElement.innerText = "Estimated value of your car is from " + result.output;
     } catch (error) {
         resultElement.className = "result-error";
         if (error.message === "RateLimitExceeded") {
-                resultElement.innerText = "You're making requests too fast. Please wait a minute and try again.";
-            } else {
-                resultElement.innerText = "Something went wrong. Please try again.";
-            }
+            resultElement.innerText = "You're making requests too fast. Please wait a minute and try again.";
+        } else {
+            resultElement.innerText = "Something went wrong. Please try again.";
+        }
     }
 };
