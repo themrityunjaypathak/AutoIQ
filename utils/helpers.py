@@ -22,11 +22,12 @@ def km_driven_cleaner(value):
         >>> km_driven_cleaner("12k")
         12000
     """
-    if value.strip().endswith('L'):
-        return round(float(value.replace('L',''))*100000)
+    if value.strip().endswith("L"):
+        return round(float(value.replace("L", "")) * 100000)
     else:
-        return round(float(value.replace('k',''))*1000)
-    
+        return round(float(value.replace("k", "")) * 1000)
+
+
 def price_cleaner(value):
     """
     Converts a string representing a price into an integer value in Indian Rupees (INR).
@@ -51,7 +52,7 @@ def price_cleaner(value):
         >>> price_cleaner("1.2Crore")
         12000000
     """
-    if value.strip().endswith('lakh'):
-        return round(float(value.replace('lakh',''))*100000)
+    if value.strip().endswith("lakh"):
+        return round(float(value.replace("lakh", "")) * 100000)
     else:
-        return round(float(value.replace('Crore',''))*10000000)
+        return round(float(value.replace("Crore", "")) * 10000000)

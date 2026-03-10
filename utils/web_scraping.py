@@ -7,6 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
+
 def scrape_car_listing(link):
     """
     Launches an automated Chrome browser session to scrape the content of a dynamically loaded car listing page.
@@ -24,36 +25,43 @@ def scrape_car_listing(link):
     try:
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
         driver.get(link)
-        
+
         scroll_pause_time = random.uniform(2, 4)
         scroll_increment = 1000
-    
-        last_height = driver.execute_script("return window.pageYOffset + window.innerHeight")
-    
+
+        last_height = driver.execute_script(
+            "return window.pageYOffset + window.innerHeight"
+        )
+
         while True:
             driver.execute_script(f"window.scrollBy(0, {scroll_increment});")
             time.sleep(scroll_pause_time)
-    
-            new_height = driver.execute_script("return window.pageYOffset + window.innerHeight")
-            total_page_height = driver.execute_script("return document.body.scrollHeight")
-            
+
+            new_height = driver.execute_script(
+                "return window.pageYOffset + window.innerHeight"
+            )
+            total_page_height = driver.execute_script(
+                "return document.body.scrollHeight"
+            )
+
             if new_height >= total_page_height or new_height == last_height:
                 break
             last_height = new_height
-    
+
         html = driver.page_source
-    
+
         driver.quit()
-    
-        soup = BeautifulSoup(html, 'lxml')
-    
+
+        soup = BeautifulSoup(html, "lxml")
+
         return soup
-    
+
     except Exception as e:
         print(f"[General Error] {e}")
     finally:
         if driver:
             driver.quit()
+
 
 def get_car_details(soup):
     """
@@ -74,21 +82,21 @@ def get_car_details(soup):
             link : URL to individual car listings page.
     """
     model_name = []
-    for i in soup.find_all('span', 'sc-braxZu kjFjan'):
+    for i in soup.find_all("span", "sc-braxZu kjFjan"):
         model_name.append(i.text)
 
     clean_model_name = []
     for i in model_name:
-        if i.startswith('2'):
+        if i.startswith("2"):
             clean_model_name.append(i)
 
     specs = []
-    for i in soup.find_all('p', 'sc-braxZu kvfdZL'):
+    for i in soup.find_all("p", "sc-braxZu kvfdZL"):
         specs.append(i.text)
 
     clean_specs = []
-    for i in range(0,len(specs),5):
-        clean_specs.append(specs[i:i+5])
+    for i in range(0, len(specs), 5):
+        clean_specs.append(specs[i : i + 5])
 
     km_driven = []
     for i in clean_specs:
@@ -105,20 +113,30 @@ def get_car_details(soup):
     owner = []
     for i in clean_specs:
         owner.append(i[3])
-            
+
     price = []
-    for i in soup.find_all('p', 'sc-braxZu cyPhJl'):
+    for i in soup.find_all("p", "sc-braxZu cyPhJl"):
         price.append(i.text)
 
     price = price[2:]
 
     link = []
-    for i in soup.find_all('a', 'styles_carCardWrapper__sXLIp'):
-        link.append(i['href'])
+    for i in soup.find_all("a", "styles_carCardWrapper__sXLIp"):
+        link.append(i["href"])
 
-    df = pd.DataFrame({'model_name':clean_model_name,'km_driven':km_driven,'fuel_type':fuel_type,
-                       'transmission':transmission,'owner':owner,'price':price,'link':link})
+    df = pd.DataFrame(
+        {
+            "model_name": clean_model_name,
+            "km_driven": km_driven,
+            "fuel_type": fuel_type,
+            "transmission": transmission,
+            "owner": owner,
+            "price": price,
+            "link": link,
+        }
+    )
     return df
+
 
 def get_engine_capacity(urls):
     """
@@ -133,16 +151,16 @@ def get_engine_capacity(urls):
     """
     engine_capacity = []
     for url in urls:
-        headers = {"User-Agent":"Mozilla/5.0"}
-        response = requests.get(url, headers=headers, timeout=random.randint(4,8))
-        soup = BeautifulSoup(response.text,"lxml")
+        headers = {"User-Agent": "Mozilla/5.0"}
+        response = requests.get(url, headers=headers, timeout=random.randint(4, 8))
+        soup = BeautifulSoup(response.text, "lxml")
 
         found = False
-        for i in soup.find_all('p', attrs={"class":"sc-braxZu jjIUAi"}):
-            if i.text.strip() == 'Engine capacity':
+        for i in soup.find_all("p", attrs={"class": "sc-braxZu jjIUAi"}):
+            if i.text.strip() == "Engine capacity":
                 engine_capacity.append(i.find_next_sibling().text)
                 found = True
-                
+
         if not found:
             engine_capacity.append(None)
     return engine_capacity

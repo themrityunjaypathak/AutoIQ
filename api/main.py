@@ -13,7 +13,6 @@ from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
 # Rate Limiting Libraries
-from fastapi import Request
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -24,6 +23,7 @@ from api.config import settings
 # Logging the Output
 logging.basicConfig(level=logging.INFO, format="%(levelname)s:    %(message)s")
 logger = logging.getLogger(__name__)
+
 
 # Loading Pipeline and Model Frequency
 @asynccontextmanager
@@ -37,8 +37,9 @@ async def lifespan(app: FastAPI):
             logger.info("Model frequency loaded successfully")
     except Exception:
         logger.exception("Model loading failed")
-    
+
     yield
+
 
 # Creating FastAPI App Instance
 app = FastAPI(title="AutoIQ by Motor.co", lifespan=lifespan)
@@ -57,11 +58,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # Root Endpoint
 @app.get("/", tags=["General"])
 def root():
     logger.info("Root endpoint accessed")
     return {"message": "Pipeline is live"}
+
 
 # Health Check Endpoint
 @app.get("/health", tags=["Utility"])
@@ -70,8 +73,9 @@ def health():
     return {
         "status": "ok",
         "pipeline_loaded": app.state.pipe is not None,
-        "model_frequency_loaded": app.state.model_freq is not None
+        "model_frequency_loaded": app.state.model_freq is not None,
     }
+
 
 # Input validation for fuel_type
 class FuelType(str, Enum):
@@ -79,10 +83,12 @@ class FuelType(str, Enum):
     DIESEL = "Diesel"
     CNG = "CNG"
 
+
 # Input validation for transmission
 class Transmission(str, Enum):
     MANUAL = "Manual"
     AUTOMATIC = "Automatic"
+
 
 # Input validation for owner
 class OwnerType(str, Enum):
@@ -91,21 +97,43 @@ class OwnerType(str, Enum):
     THIRD = "3rd owner"
     OTHERS = "Others"
 
+
 # Define Input Data Schema using Pydantic
 class Input(BaseModel):
-    brand: str = Field(..., description="Brand Name of your Car", example="MG")
-    model: str = Field(..., description="Model Name of your Car", example="HECTOR")  
-    km_driven: int = Field(..., ge=1000, le=200000, description="KM Driven of your Car", example=80000)
-    engine_capacity: int = Field(..., ge=700, le=3000, description="Engine Capacity (in cc) of your Car", example=1498)
-    fuel_type: FuelType = Field(..., description="Fuel Type of your Car", example="Petrol")
-    transmission: Transmission = Field(..., description="Transmission of your Car", example="Manual")
-    year: int = Field(..., ge=2010, le=2024, description="Manufacture Year of your Car", example=2022)
-    owner: OwnerType = Field(..., description="Owner Type of your Car", example="1st owner")
+    brand: str = Field(..., description="Brand Name of your Car", examples=["MG"])
+    model: str = Field(..., description="Model Name of your Car", examples=["HECTOR"])
+    km_driven: int = Field(
+        ..., ge=1000, le=200000, description="KM Driven of your Car", examples=[80000]
+    )
+    engine_capacity: int = Field(
+        ...,
+        ge=700,
+        le=3000,
+        description="Engine Capacity (in cc) of your Car",
+        examples=[1498],
+    )
+    fuel_type: FuelType = Field(
+        ..., description="Fuel Type of your Car", examples=["Petrol"]
+    )
+    transmission: Transmission = Field(
+        ..., description="Transmission of your Car", examples=["Manual"]
+    )
+    year: int = Field(
+        ...,
+        ge=2010,
+        le=2024,
+        description="Manufacture Year of your Car",
+        examples=[2022],
+    )
+    owner: OwnerType = Field(
+        ..., description="Owner Type of your Car", examples=["1st owner"]
+    )
+
 
 # Prediction Endpoint
 @app.post("/predict", tags=["Prediction"])
 @limiter.limit("5/minute")
-def predict(data: Input, request: Request):
+async def predict(data: Input, request: Request):
     pipe = request.app.state.pipe
     model_freq = request.app.state.model_freq
 
@@ -118,26 +146,28 @@ def predict(data: Input, request: Request):
         return {"error": "Model frequency is not available"}
 
     try:
-        input_data = pd.DataFrame({
-                        "brand":[data.brand],
-                        "model_freq":[model_freq.get(data.model)],
-                        "km_driven":[data.km_driven],
-                        "engine_capacity":[data.engine_capacity],
-                        "fuel_type":[data.fuel_type],
-                        "transmission":[data.transmission],
-                        "year":[data.year],
-                        "owner":[data.owner]
-                        })
+        input_data = pd.DataFrame(
+            {
+                "brand": [data.brand],
+                "model_freq": [model_freq.get(data.model)],
+                "km_driven": [data.km_driven],
+                "engine_capacity": [data.engine_capacity],
+                "fuel_type": [data.fuel_type],
+                "transmission": [data.transmission],
+                "year": [data.year],
+                "owner": [data.owner],
+            }
+        )
         logger.info("Input data prepared for prediction")
-        
+
         prediction = round(pipe.predict(input_data)[0])
         logger.info("Prediction made successfully")
 
         lower_limit = prediction - settings.MAE
         upper_limit = prediction + settings.MAE
 
-        format_lower = format_currency(round(lower_limit,3), "INR", locale="en_IN")
-        format_upper = format_currency(round(upper_limit,3), "INR", locale="en_IN")
+        format_lower = format_currency(round(lower_limit, 3), "INR", locale="en_IN")
+        format_upper = format_currency(round(upper_limit, 3), "INR", locale="en_IN")
 
         result = f"{format_lower.split('.')[0]} to {format_upper.split('.')[0]}"
         logger.info("Prediction formatted successfully")

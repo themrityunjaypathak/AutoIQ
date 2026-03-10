@@ -1,5 +1,6 @@
 import os
 
+
 def create_path(folder_name, file_name):
     """
     Returns the full path of a specified file from a given folder.

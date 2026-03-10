@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import List
 from pydantic_settings import BaseSettings
 
+
 # Loading and Validating Environment Variables
 class Settings(BaseSettings):
     ENV: str = "dev"
@@ -18,5 +19,6 @@ class Settings(BaseSettings):
 
     class Config:
         env_file = ".env" if not os.getenv("RENDER") else None
+
 
 settings = Settings()
