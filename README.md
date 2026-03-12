@@ -1,18 +1,19 @@
-<h2 align='center'>AutoIQ : Used Car Pricing System</h2>
+<h3 align="center">AutoIQ : Used Car Pricing System</h3>
 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Website-E34F26?style=flat&logo=html5&logoColor=white)](https://themrityunjaypathak.github.io/AutoIQ/)
-[![Python](https://img.shields.io/badge/Python-v3.11-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
-[![Pandas](https://img.shields.io/badge/Pandas-v2.3-150458?style=flat&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
-[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-v1.7-F7931E?style=flat&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/stable/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-v0.116-009688?style=flat&logo=fastapi&logoColor=white)](https://autoiq.onrender.com/docs)
-[![Docker](https://img.shields.io/badge/Docker-v29.1-2496ED?style=flat&logo=docker&logoColor=white)](https://hub.docker.com/r/themrityunjaypathak/autoiq)
-[![Git](https://img.shields.io/badge/Git-v2.47-F05032?style=flat&logo=git&logoColor=white)](https://git-scm.com/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-E34F26?style=flat&logo=html5&logoColor=white)](https://themrityunjaypathak.github.io/AutoIQ/)
+[![API Docs](https://img.shields.io/badge/API-Docs-009688?style=flat&logo=fastapi&logoColor=white)](https://autoiq.onrender.com/docs)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-Image-2496ED?style=flat&logo=docker&logoColor=white)](https://hub.docker.com/r/themrityunjaypathak/autoiq)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![Pandas](https://img.shields.io/badge/Pandas-4420C7?style=flat&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/stable/)
+[![Selenium](https://img.shields.io/badge/Selenium-43B02A?style=flat&logo=selenium&logoColor=white)](https://www.selenium.dev/)
+[![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)](https://git-scm.com/)
 
 </div>
 
-<a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="AutoIQ by Motor.co" src="https://github.com/user-attachments/assets/117c32a5-b827-4e4a-9251-fc4e50e4a10e"></a>
+<a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="AutoIQ by Motor.co" src="https://github.com/user-attachments/assets/ab33b9bd-16fa-424f-a19c-96fb1ad26f97"></a>
 
 ## Table of Contents
 - [Problem Statement](#problem-statement)
