@@ -13,7 +13,7 @@
 
 </div>
 
-<a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="AutoIQ by Motor.co" src="https://github.com/user-attachments/assets/ab33b9bd-16fa-424f-a19c-96fb1ad26f97"></a>
+<a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="AutoIQ by Motor.co" src="https://github.com/user-attachments/assets/ff552d20-06e8-42c5-9804-2dffb58c36bd"></a>
 
 ## Table of Contents
 - [Problem Statement](#problem-statement)
@@ -859,7 +859,7 @@ You can open `index.html` directly in your browser or serve it via a local HTTP 
 
 Access the live Website [here](https://themrityunjaypathak.github.io/AutoIQ/) or Click on the Image below.
 
-<a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="frontend-ui" src="https://github.com/user-attachments/assets/00ee1b2c-7f27-471f-bf13-59b5bb916dac"></a>
+<a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="frontend-ui" src="https://github.com/user-attachments/assets/efa1a464-fb31-4ecf-8d20-4bee11723745"></a>
 
 <hr>
 
