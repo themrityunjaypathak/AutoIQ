@@ -42,7 +42,7 @@ async def lifespan(app: FastAPI):
 
 
 # Creating FastAPI App Instance
-app = FastAPI(title="AutoIQ by Motor.co", lifespan=lifespan)
+app = FastAPI(title="AutoIQ", lifespan=lifespan)
 
 # Setting up Rate Limiter
 limiter = Limiter(key_func=get_remote_address)
