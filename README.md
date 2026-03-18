@@ -752,7 +752,7 @@ docker push your-dockerhub-username/your_image_name:latest
 
 Access the Docker Hub [here](https://hub.docker.com/r/themrityunjaypathak/autoiq) or Click on the Image below.
 
-<a href="https://hub.docker.com/r/themrityunjaypathak/autoiq"><img title="docker-hub" src="https://github.com/user-attachments/assets/b98b5b6b-e013-47fd-9b64-73616309b85c"></a>
+<a href="https://hub.docker.com/r/themrityunjaypathak/autoiq"><img title="docker-hub" src="https://github.com/user-attachments/assets/1c58e02f-a0cf-43b2-b38b-b0208e86e0cb"></a>
 
 ### 8. Pull and Run Anywhere
 - Once pushed, anyone can pull your image from Docker Hub and run it.
