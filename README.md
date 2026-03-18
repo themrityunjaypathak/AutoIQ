@@ -469,7 +469,7 @@ This opens the Swagger UI for testing the API endpoints.
 
 Access the live API [here](https://autoiq.onrender.com/docs) or Click on the Image below.
 
-<a href="https://autoiq.onrender.com/docs"><img title="swagger-ui" src="https://github.com/user-attachments/assets/fe5432df-6a68-4e2d-ad83-279ce895251b"></a>
+<a href="https://autoiq.onrender.com/docs"><img title="swagger-ui" src="https://github.com/user-attachments/assets/ddb6edf0-4434-4282-a08d-83947c74e108"></a>
 
 ### 6. Stop the Docker Container
 When you're done using the application, stop the running container.
