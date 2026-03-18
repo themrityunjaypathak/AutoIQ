@@ -424,7 +424,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.config import settings
 
-app = FastAPI(title="AutoIQ by Motor.co")
+app = FastAPI(title="AutoIQ")
 
 app.add_middleware(
     CORSMiddleware,
