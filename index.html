@@ -23,6 +23,9 @@
     <!-- Fontshare Section -->
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@1&display=swap" rel="stylesheet">
 
+    <!-- Image Preload Section -->
+    <link rel="preload" as="image" href="images/hero_image.png">
+
     <!-- Google Analytics Tag -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-4YGZX5TVNK"></script>
     <script>
@@ -62,7 +65,7 @@
         <section class="form">
 
             <div class="hero-image">
-                <img src="images/hero_image.png" alt="Car Price Prediction Illustration" loading="lazy">
+                <img src="images/hero_image.png" alt="Car Price Prediction Illustration" fetchpriority="high">
             </div>
 
             <form class="prediction" id="predictionForm">
