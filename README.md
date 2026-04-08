@@ -58,11 +58,11 @@
 <hr>
 
 ## Impact
-- Achieved a 30% lower MAE and a 12% higher R2 score compared to the baseline regression model.
+- Achieved a 30% lower MAE and a 12% higher R<sup>2</sup> score compared to the baseline regression model.
 - Reduced prediction error variance by 70%, ensuring more stable and reliable predictions.
 - Helps sellers price vehicles closer to true market value, reducing revenue loss from underpricing.
 - Helps buyers make confident purchase decisions by identifying fairly priced listings.
-- Increases revenue by aligning vehicle prices with current market value, reducing underpricing and overpricing risks.
+- Increases revenue by aligning vehicle prices with current market value, reducing underpricing or overpricing risks.
 
 <hr>
 
