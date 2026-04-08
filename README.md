@@ -36,7 +36,7 @@
 ## Problem Statement
 - In the used car market, buyers and sellers often struggle to determine a fair price for their vehicles.
 - Incorrect pricing can result in lost revenue if undervalued or delayed sales if overpriced.
-- This goal is to provide accurate and transparent pricing for used cars by analyzing real-world market listings.
+- The goal is to provide accurate and transparent pricing for used cars by analyzing real-world market listings.
 
 <hr>
 
@@ -44,10 +44,10 @@
 - Built and deployed an end-to-end machine learning pipeline to predict used car prices using real-world data.
 - Collected and cleaned 2,800+ used car listings from CARS24 using Selenium and BeautifulSoup.
 - Optimized dataset memory usage by 90% through downcasting data types and converting to Parquet format.
-- Trained regression models using Scikit-learn Pipelines to prevent data leakage and ensure reliable evaluation.
+- Trained regression models using Scikit-learn pipelines to prevent data leakage and ensure reliable evaluation.
 - Deployed the trained machine learning model as a REST API using FastAPI on Render.
 - Built an HTML/CSS/JS frontend hosted on GitHub Pages to interact with the REST API and display predictions.
-- Containerized the entire application using Docker and pushed to Docker Hub for reproducibility.
+- Containerized the entire application using Docker and pushed it to Docker Hub for reproducibility.
 
 <hr>
 
@@ -62,7 +62,7 @@
 - Reduced prediction error variance by 70%, ensuring more stable and reliable predictions.
 - Helps sellers price vehicles closer to true market value, reducing revenue loss from underpricing.
 - Helps buyers make confident purchase decisions by identifying fairly priced listings.
-- Increases revenue by aligning vehicle prices with current market value, reducing underpricing or overpricing risks.
+- Increases revenue by aligning vehicle prices with current market value, reducing underpricing and overpricing risks.
 
 <hr>
 
