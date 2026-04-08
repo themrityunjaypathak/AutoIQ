@@ -24,7 +24,6 @@
 - [Setup](#setup)
 - [Testing](#testing)
 - [Dockerization](#dockerization)
-- [Deployment](#deployment)
 - [Application](#application)
 - [Model Training & Evaluation](#model-training--evaluation)
 - [Challenges & Solutions](#challenges--solutions)
@@ -782,38 +781,6 @@ docker ps
 ```bash
 docker stop container_id
 ```
-
-<hr>
-
-## Deployment
-
-Follow these steps carefully to deploy your FastAPI application on Render :
-
-- Push your code to [GitHub](https://github.com/)
-  
-- Login to [Render](https://render.com/)
-  
-- Create a New Web Service
-
-<img title="new-web-service" src="https://github.com/user-attachments/assets/fc5c7c1b-d302-4813-b182-be40139a7043">
-&nbsp;
-
-- Link your GitHub Repository / Existing Docker Image
-
-<img title="link-github-repo" src="https://github.com/user-attachments/assets/06c92254-5e97-4bd5-9c97-864618226c85">
-&nbsp;
-
-- Add details about your API
-
-<img title="details" src="https://github.com/user-attachments/assets/f834eac3-b8b7-49d3-ba61-9d05acc9e80d">
-&nbsp;
-
-- Add Environment Variables in Render Dashboard (same as `.env`)
-
-<img title="env-variable" src="https://github.com/user-attachments/assets/9c1cbb1d-f3eb-41f5-bed8-d83d71578abf">
-&nbsp;
-
-- Deploy the Web Service
 
 <hr>
 
