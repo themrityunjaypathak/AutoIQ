@@ -115,7 +115,7 @@
 #### 1. Find Raw Model Name Texts
 - Looks for `<span>` elements with class `sc-braxZu kjFjan`.
 - Extracts the text using `.text` into a list called `model_name`.
-- The code only keeps those model that start with `2` and stores them in `clean_model_name`.
+- The code only keeps those car models that start with `2` and stores them in `clean_model_name`.
 
 <details>
 <summary>Click to view the HTML Element Snapshot</summary>
@@ -160,8 +160,8 @@
 </details>
 
 #### 3. Group Specifications
-- The flat `specs` list is split into consecutive groups of 5 (`clean_specs.appendspecs[i:i+5])`).
-- Each group corresponds to one listing's set of specification value.
+- The flat `specs` list is split into consecutive groups of 5 (`clean_specs.append(specs[i:i+5])`).
+- Each group corresponds to a set of specification values for each listing.
    
 ```python
 [['69.95k km', 'Petrol', 'Manual', '1st owner', 'DL-1C'],
@@ -175,7 +175,7 @@
     - `clean_specs[1]` → `fuel_type`
     - `clean_specs[2]` → `transmission`
     - `clean_specs[3]` → `owner`
-- `clean_specs[4]` → `number_plate` exists but is of no use.
+- `clean_specs[4]` → `number_plate` exists but is not relevant.
 
 #### 5. Extract Price Values
 - `soup.find_all('p', 'sc-braxZu cyPhJl')` collects price elements into `price` list.
@@ -214,7 +214,7 @@
 - The column names are `model_name`, `km_driven`, `fuel_type`, `transmission`, `owner`, `price`, `link`.
 
 #### 8. Return the DataFrame
-- Finally, function returns the above DataFrame for further cleaning, analysis and modelling.
+- Finally, function returns the above DataFrame for further cleaning, analysis, and modelling.
 
 </details>
 
@@ -308,7 +308,7 @@ engine_capacity = get_engine_capacity(df['link'])
 # Adding "engine_capacity" column in the DataFrame
 df['engine_capacity'] = engine_capacity
 
-# Final DataFrame after Web Scrapping
+# Final DataFrame after Web Scraping
 df.head()
 ```
 </details>
@@ -762,7 +762,7 @@ Access the Docker Hub [here](https://hub.docker.com/r/themrityunjaypathak/autoiq
 docker pull your-dockerhub-username/your_image_name:latest
 ```
 
-- After pulling the Docker image, you can run it to create Docker container from it.
+- After pulling the Docker image, you can run it to create a Docker container from it.
 
 ```bash
 docker run --env-file .env -p 8000:8000 your-dockerhub-username/your_image_name:latest
@@ -1282,7 +1282,7 @@ AutoIQ/
 │   ├── pipe.pkl
 │   └── model_freq.pkl
 │
-├── notebooks/                # Jupyter Notebooks for Project Developement
+├── notebooks/                # Jupyter Notebooks for Project Development
 │   └── data_cleaning.ipynb
 |   └── ...
 │
