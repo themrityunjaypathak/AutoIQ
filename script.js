@@ -80,39 +80,39 @@ async function predict() {
     // Validation Check for Inputs
     if (!brand || !model || !fuel_type || !transmission || !owner) {
         resultElement.className = "result-error";
-        document.getElementById('result').textContent = "Please fill all the details.";
+        document.getElementById('result').innerHTML = "Please fill all the details.";
         return;
     }
 
     if (isNaN(km_driven) || km_driven <= 1000 || km_driven > 200000) {
         resultElement.className = "result-error";
-        document.getElementById('result').textContent = "Invalid KM Driven value. Please enter a value between 1,000 and 2,00,000 km.";
+        document.getElementById('result').innerHTML = "Invalid KM Driven value.<br>Please enter a value between 1,000 and 2,00,000 km.";
         return;
     }
 
     if (isNaN(engine_capacity) || engine_capacity <= 700 || engine_capacity > 3000) {
         resultElement.className = "result-error";
-        document.getElementById('result').textContent = "Invalid Engine Capacity value. Please enter a value between 700 and 3,000 cc.";
+        document.getElementById('result').innerHTML = "Invalid Engine Capacity value.<br>Please enter a value between 700 and 3,000 cc.";
         return;
     }
 
     if (isNaN(year) || year < 2010 || year > 2024) {
         resultElement.className = "result-error";
-        document.getElementById('result').textContent = "Invalid Year value. Please enter a value between 2010 and 2024.";
+        document.getElementById('result').innerHTML = "Invalid Year value.<br>Please enter a value between 2010 and 2024.";
         return;
     }
 
     const validFuelTypes = ["Petrol", "Diesel", "CNG"];
     if (!validFuelTypes.includes(fuel_type)) {
         resultElement.className = "result-error";
-        document.getElementById('result').textContent = "Please select a valid Fuel Type (Petrol, Diesel, or CNG).";
+        document.getElementById('result').innerHTML = "Please select a valid Fuel Type (Petrol, Diesel, or CNG).";
         return;
     }
 
     const validTransmissions = ["Manual", "Automatic"];
     if (!validTransmissions.includes(transmission)) {
         resultElement.className = "result-error";
-        document.getElementById('result').textContent = "Please select a valid Transmission Type (Manual or Automatic).";
+        document.getElementById('result').innerHTML = "Please select a valid Transmission Type (Manual or Automatic).";
         return;
     }
 
@@ -153,9 +153,9 @@ async function predict() {
     } catch (error) {
         resultElement.className = "result-error";
         if (error.message === "RateLimitExceeded") {
-            resultElement.innerText = "You're making requests too fast. Please wait a minute and try again.";
+            resultElement.innerHTML = "You're making requests too fast.<br>Please wait a minute and try again.";
         } else {
-            resultElement.innerText = "Something went wrong. Please try again.";
+            resultElement.innerHTML = "Something went wrong. Please try again.";
         }
     }
 };

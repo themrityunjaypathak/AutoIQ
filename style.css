@@ -7,7 +7,8 @@
 
 /* Body Section */
 body {
-    font-family: "Clash Display", sans-serif;
+    font-family: "Chillax", sans-serif;
+    letter-spacing: -1px;
     background-color: #FBEFEF;
     color: #1A2421;
 }
@@ -27,7 +28,7 @@ body::-webkit-scrollbar {
     top: 0;
     width: 100%;
     padding: 12px 2%;
-    font-size: medium;
+    font-size: 17px;
     background-color: #F9DFDF;
     border-bottom: 1px solid #A6AEBF;
     z-index: 99999;
@@ -77,8 +78,8 @@ body::-webkit-scrollbar {
     color: #FE0A0B;
 }
 
-/* Login Button Section */
-.login-button {
+/* Star Button Section */
+.star-button {
     text-decoration: none;
     padding: 8px 12px;
     cursor: pointer;
@@ -87,17 +88,23 @@ body::-webkit-scrollbar {
     border-radius: 100px;
 }
 
-.login-button i {
-    margin-left: 6px;
+.star-button i {
+    margin-right: 6px;
 }
 
-.login-button .fa-arrow-right {
-    transform: rotate(-45deg);
-    transition: all 0.3s ease-in-out;
+.star-button:hover .fa-star {
+    animation: spin 2s infinite;
+    cursor: pointer;
 }
 
-.login-button:hover .fa-arrow-right {
-    transform: rotate(0deg);
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Container Section */
@@ -116,7 +123,7 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    transform: translate(0%, 20%);
+    transform: translate(0%, 22.5%);
 }
 
 .hero-image {
@@ -141,17 +148,17 @@ body::-webkit-scrollbar {
     max-width: 500px;
     padding: 12px;
     background-color: #F9DFDF;
-    border-radius: 12px;
+    border-radius: 10px;
 }
 
 /* Model Input Section */
 .form-grid {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     width: 100%;
     color: #1A2421;
-    border-radius: 12px;
+    border-radius: 10px;
 }
 
 .input-group {
@@ -162,13 +169,14 @@ input[type="text"],
 input[type="number"],
 select {
     width: 100%;
-    font-family: "Clash Display", sans-serif;
+    font-family: "Chillax", sans-serif;
+    letter-spacing: -1px;
     font-size: medium;
-    padding: 12px;
+    padding: 10px;
     background-color: white;
     color: #1A2421;
     border: 1px solid #A6AEBF;
-    border-radius: 12px;
+    border-radius: 10px;
 }
 
 input[type="text"]:focus,
@@ -182,9 +190,9 @@ select:focus {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     justify-content: center;
-    gap: 12px;
-    margin-top: 12px;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     width: 100%;
     border: none;
 }
@@ -216,21 +224,22 @@ select:focus {
 .form-button {
     display: flex;
     flex-direction: row;
-    gap: 12px;
+    gap: 10px;
 }
 
 .form-button button {
     user-select: none;
     cursor: pointer;
-    font-family: "Clash Display", sans-serif;
+    font-family: "Chillax", sans-serif;
+    letter-spacing: -1px;
     font-size: medium;
     text-align: center;
-    padding: 12px;
+    padding: 10px;
     width: 100%;
     background-color: white;
     color: #1A2421;
     border: 1px solid #A6AEBF;
-    border-radius: 12px;
+    border-radius: 10px;
     transition: all 0.3s ease-in-out;
 }
 
@@ -251,7 +260,7 @@ select:focus {
     justify-content: center;
     text-align: center;
     width: 100%;
-    margin-top: 12px;
+    margin-top: 10px;
     font-size: medium;
     color: #1A2421;
     word-wrap: break-word;
@@ -263,7 +272,7 @@ select:focus {
     justify-content: center;
     text-align: center;
     width: 100%;
-    margin-top: 12px;
+    margin-top: 10px;
     font-size: medium;
     color: #1A2421;
     word-wrap: break-word;
@@ -279,7 +288,7 @@ select:focus {
     justify-content: center;
     text-align: center;
     width: 100%;
-    margin-top: 12px;
+    margin-top: 10px;
     font-size: medium;
     color: #0F7B21;
 }
@@ -290,7 +299,7 @@ select:focus {
     justify-content: center;
     text-align: center;
     width: 100%;
-    margin-top: 12px;
+    margin-top: 10px;
     font-size: medium;
     color: #FE0A0B;
 }
@@ -372,7 +381,6 @@ select:focus {
 
     .form {
         flex-direction: column;
-        gap: 24px;
         transform: translate(0, 100px);
         padding-bottom: 15px;
     }
@@ -386,7 +394,7 @@ select:focus {
     }
 
     .owner {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(4, 1fr);
     }
 
     .owner label {
