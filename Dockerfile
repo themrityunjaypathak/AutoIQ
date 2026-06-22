@@ -29,7 +29,7 @@ RUN mkdir -p /install && \
     pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-# Copies all the remaining project files (Flask API, HTML, CSS, JS, etc.) into /app.
+# Copies all the remaining project files (FastAPI, HTML, CSS, JS, etc.) into /app.
 COPY . .
 
 # ---- Stage 2: Final Image ----
