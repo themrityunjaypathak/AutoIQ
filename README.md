@@ -54,9 +54,9 @@
 <hr>
 
 ## Impact
-- Cut MAE by 30% (₹123,193 → ₹85,309) and improved R² from 0.77 to 0.88 over a linear-regression baseline.
+- Cut MAE by 31% (₹123,193 → ₹85,309) and improved R² from 0.77 to 0.88 over a Linear Regression baseline.
 - Reduced MAE variability by ~64% (std 6,435 → 2,321) through tuning, producing more consistent predictions.
-- Validated on a held-out test set, achieving MAE of ₹88,313 and R² of 0.88 on unseen data.
+- Validated on a held-out test set, achieving MAE of ₹88,313 and R² of 0.88 on completely unseen data.
 - Delivers data-driven price estimates that support more informed buying and selling decisions.
 
 <hr>
