@@ -8,9 +8,10 @@ from pydantic_settings import BaseSettings
 # Loading and Validating Environment Variables
 class Settings(BaseSettings):
     ENV: str = "dev"
-    MAE: int
     PIPE_PATH: Path
     MODEL_FREQ_PATH: Path
+    LOWER_PIPE_PATH: Path
+    UPPER_PIPE_PATH: Path
     ALLOWED_ORIGINS: str
 
     @property
