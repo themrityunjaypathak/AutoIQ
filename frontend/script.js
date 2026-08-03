@@ -1,3 +1,15 @@
+// Mobile Navigation Toggle
+const menuToggle = document.getElementById("menuToggle");
+const navMenu = document.getElementById("navMenu");
+
+menuToggle.addEventListener("click", function () {
+    const isOpen = navMenu.classList.toggle("open");
+    menuToggle.setAttribute("aria-expanded", isOpen);
+});
+
+// Prediction Form Submit (button click or Enter key)
+document.getElementById("predictionForm").addEventListener("submit", predict);
+
 // Reset Button
 function resetForm() {
     document.querySelectorAll("input, select").forEach(el => {
@@ -57,7 +69,9 @@ document.getElementById('brand').addEventListener('change', function () {
 });
 
 // Prediction Function
-async function predict() {
+async function predict(event) {
+    event.preventDefault();
+
     const resultElement = document.getElementById("result");
     resultElement.className = "";
 
@@ -84,13 +98,13 @@ async function predict() {
         return;
     }
 
-    if (isNaN(km_driven) || km_driven <= 1000 || km_driven > 200000) {
+    if (isNaN(km_driven) || km_driven < 1000 || km_driven > 200000) {
         resultElement.className = "result-error";
         document.getElementById('result').innerHTML = "Invalid KM Driven value.<br>Please enter a value between 1,000 and 2,00,000 km.";
         return;
     }
 
-    if (isNaN(engine_capacity) || engine_capacity <= 700 || engine_capacity > 3000) {
+    if (isNaN(engine_capacity) || engine_capacity < 700 || engine_capacity > 3000) {
         resultElement.className = "result-error";
         document.getElementById('result').innerHTML = "Invalid Engine Capacity value.<br>Please enter a value between 700 and 3,000 cc.";
         return;
@@ -118,7 +132,11 @@ async function predict() {
 
     // Showing Loading Indicator while Prediction
     resultElement.className = "loading";
-    resultElement.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Estimating the value of your car.....`;
+    resultElement.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Estimating the value of your car...`;
+
+    // Disabling Predict Button to Prevent Duplicate Requests
+    const predictButton = document.getElementById("predictButton");
+    predictButton.disabled = true;
 
     // Structure of Input
     const data = {
@@ -134,13 +152,16 @@ async function predict() {
 
     // API Request for Prediction
     try {
-        const fetchPromise = fetch("https://autoiq.onrender.com/predict", {
+        const fetchPromise = fetch("http://localhost:8000/predict", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
         }).then(async res => {
             if (res.status === 429) {
                 throw new Error("RateLimitExceeded");
+            }
+            if (!res.ok) {
+                throw new Error("RequestFailed");
             }
             return res.json();
         });
@@ -157,5 +178,7 @@ async function predict() {
         } else {
             resultElement.innerHTML = "Something went wrong. Please try again.";
         }
+    } finally {
+        predictButton.disabled = false;
     }
 };
