@@ -1,6 +1,10 @@
 import os
 import pandas as pd
 
+# Project root is always one level above this file (utils/), regardless of
+# which directory a notebook or script is run from.
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def load_csv(folder_name, file_name):
     """
@@ -17,28 +21,20 @@ def load_csv(folder_name, file_name):
         ValueError: If file_name does not end with .csv extension.
         FileNotFoundError: If folder does not exist or file does not exist in the specified folder.
     """
-    try:
-        if not file_name.endswith(".csv"):
-            raise ValueError("File name must end with '.csv' extension")
+    if not file_name.endswith(".csv"):
+        raise ValueError("File name must end with '.csv' extension")
 
-        current_dir = os.getcwd()
-        parent_dir = os.path.dirname(current_dir)
-        folder_path = os.path.join(parent_dir, folder_name)
-        file_path = os.path.join(folder_path, file_name)
+    folder_path = os.path.join(PROJECT_ROOT, folder_name)
+    file_path = os.path.join(folder_path, file_name)
 
-        if not os.path.isdir(folder_path):
-            raise FileNotFoundError(f"Folder '{folder_name}' does not exists")
-        if not os.path.isfile(file_path):
-            raise FileNotFoundError(
-                f"File '{file_name}' not found in folder '{folder_name}'"
-            )
+    if not os.path.isdir(folder_path):
+        raise FileNotFoundError(f"Folder '{folder_name}' does not exists")
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(
+            f"File '{file_name}' not found in folder '{folder_name}'"
+        )
 
-        df = pd.read_csv(file_path)
-        return df
-
-    except (FileNotFoundError, ValueError) as e:
-        print(e)
-        return pd.DataFrame()
+    return pd.read_csv(file_path)
 
 
 def load_parquet(folder_name, file_name):
@@ -56,25 +52,17 @@ def load_parquet(folder_name, file_name):
         ValueError: If file_name does not end with .parquet extension.
         FileNotFoundError: If folder does not exist or file does not exist in the specified folder.
     """
-    try:
-        if not file_name.endswith(".parquet"):
-            raise ValueError("File name must end with '.parquet' extension")
+    if not file_name.endswith(".parquet"):
+        raise ValueError("File name must end with '.parquet' extension")
 
-        current_dir = os.getcwd()
-        parent_dir = os.path.dirname(current_dir)
-        folder_path = os.path.join(parent_dir, folder_name)
-        file_path = os.path.join(folder_path, file_name)
+    folder_path = os.path.join(PROJECT_ROOT, folder_name)
+    file_path = os.path.join(folder_path, file_name)
 
-        if not os.path.isdir(folder_path):
-            raise FileNotFoundError(f"Folder '{folder_name}' does not exists")
-        if not os.path.isfile(file_path):
-            raise FileNotFoundError(
-                f"File '{file_name}' not found in folder '{folder_name}'"
-            )
+    if not os.path.isdir(folder_path):
+        raise FileNotFoundError(f"Folder '{folder_name}' does not exists")
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(
+            f"File '{file_name}' not found in folder '{folder_name}'"
+        )
 
-        df = pd.read_parquet(file_path, engine="pyarrow")
-        return df
-
-    except (FileNotFoundError, ValueError) as e:
-        print(e)
-        return pd.DataFrame()
+    return pd.read_parquet(file_path, engine="pyarrow")
