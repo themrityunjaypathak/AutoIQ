@@ -15,9 +15,6 @@
     <!-- CSS File Section -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Fontshare Section -->
-    <link href="https://api.fontshare.com/v2/css?f[]=chillax@1&display=swap" rel="stylesheet">
-
     <!-- Image Preload Section -->
     <link rel="preload" as="image" href="images/hero_image.png">
 
@@ -41,7 +38,7 @@
             <img src="images/favicon.png" alt="AutoIQ Logo" loading="lazy">
         </div>
 
-        <nav class="menu">
+        <nav class="menu" id="navMenu">
             <a href="https://github.com/themrityunjaypathak/AutoIQ" target="_blank">GitHub</a>
             <a href="https://autoiq.onrender.com/docs" target="_blank">API Docs</a>
             <a href="https://hub.docker.com/r/themrityunjaypathak/autoiq" target="_blank">Docker Hub</a>
@@ -50,6 +47,11 @@
         <a href="https://github.com/themrityunjaypathak/AutoIQ" class="star-button" target="_blank">
             <i class="fa-solid fa-star"></i> Star on GitHub
         </a>
+
+        <button type="button" class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu"
+            aria-expanded="false">
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
     </header>
 
@@ -68,7 +70,7 @@
 
                     <!-- Car Brand Input -->
                     <div class="input-group">
-                        <select id="brand" required>
+                        <select id="brand" aria-label="Brand of your Car" required>
                             <option value="">Select Brand of your Car</option>
                             <option value="Maruti">Maruti</option>
                             <option value="Tata">Tata</option>
@@ -93,25 +95,27 @@
 
                     <!-- Car Model Input -->
                     <div class="input-group">
-                        <select id="model" required>
+                        <select id="model" aria-label="Model of your Car" required>
                             <option value="">Select Model of your Car</option>
                         </select>
                     </div>
 
                     <!-- KM Driven Input -->
                     <div class="input-group">
-                        <input id="km_driven" placeholder="Enter KM Driven of your Car" type="number" min="0" required>
+                        <input id="km_driven" aria-label="KM Driven of your Car"
+                            placeholder="Enter KM Driven of your Car" type="number" min="1000" max="200000" required>
                     </div>
 
                     <!-- Engine Capacity Input -->
                     <div class="input-group">
-                        <input id="engine_capacity" placeholder="Enter Engine Capacity (in CC) of your Car"
-                            type="number" min="0" required>
+                        <input id="engine_capacity" aria-label="Engine Capacity of your Car"
+                            placeholder="Enter Engine Capacity (in CC) of your Car" type="number" min="700" max="3000"
+                            required>
                     </div>
 
                     <!-- Fuel Type Input -->
                     <div class="input-group">
-                        <select id="fuel_type" required>
+                        <select id="fuel_type" aria-label="Fuel Type of your Car" required>
                             <option value="">Select Fuel Type of your Car</option>
                             <option value="Petrol">Petrol</option>
                             <option value="Diesel">Diesel</option>
@@ -121,7 +125,7 @@
 
                     <!-- Transmission Input -->
                     <div class="input-group">
-                        <select id="transmission" required>
+                        <select id="transmission" aria-label="Transmission of your Car" required>
                             <option value="">Select Transmission of your Car</option>
                             <option value="Automatic">Automatic</option>
                             <option value="Manual">Manual</option>
@@ -130,7 +134,7 @@
 
                     <!-- Manufacture Year Input -->
                     <div class="input-group">
-                        <select id="year" required>
+                        <select id="year" aria-label="Manufacture Year of your Car" required>
                             <option value="">Select Manufacture Year of your Car</option>
                             <option value="2010">2010</option>
                             <option value="2011">2011</option>
@@ -154,22 +158,21 @@
 
                 <!-- Owner Input -->
                 <fieldset id="owner" class="owner">
+                    <legend class="sr-only">Owner Type of your Car</legend>
                     <input type="radio" id="owner1" name="owner_type" value="1st owner" checked>
-                    <label for="owner1">1<sup>st</sup> Owner</label>
+                    <label for="owner1">1<sup>st</sup>&nbsp;Owner</label>
                     <input type="radio" id="owner2" name="owner_type" value="2nd owner">
-                    <label for="owner2">2<sup>nd</sup> Owner</label>
+                    <label for="owner2">2<sup>nd</sup>&nbsp;Owner</label>
                     <input type="radio" id="owner3" name="owner_type" value="3rd owner">
-                    <label for="owner3">3<sup>rd</sup> Owner</label>
+                    <label for="owner3">3<sup>rd</sup>&nbsp;Owner</label>
                     <input type="radio" id="owner4" name="owner_type" value="Others">
                     <label for="owner4">Others</label>
                 </fieldset>
 
                 <!-- Form Button Section -->
                 <div class="form-button">
-                    <button type="button" onclick="predict()"><i class="fa-solid fa-earth-americas"></i>
-                        Predict</button>
-                    <button type="button" onclick="resetForm()"><i class="fa-solid fa-rotate-right"></i>
-                        Reset</button>
+                    <button type="submit" id="predictButton">Predict<i class="fa-solid fa-earth-americas"></i></button>
+                    <button type="button" onclick="resetForm()">Reset<i class="fa-solid fa-rotate-right"></i></button>
                 </div>
 
                 <!-- Prediction Result -->
