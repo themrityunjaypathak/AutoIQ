@@ -21,8 +21,17 @@ __pycache__/
 *.parquet
 *.csv
 
-# Python Package (utils)
+# Training Assets
+notebooks/
+clean_data/
+scrape_data/
+scrape_code/
+
+# Python Package
 utils/
+
+# Static Frontend
+frontend/
 
 # Local/Temporary Files
 *.log
