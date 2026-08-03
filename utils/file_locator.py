@@ -1,5 +1,9 @@
 import os
 
+# Project root is always one level above this file (utils/), regardless of
+# which directory a notebook or script is run from.
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def create_path(folder_name, file_name):
     """
@@ -15,11 +19,9 @@ def create_path(folder_name, file_name):
 
     Example:
         >>> create_path('images', 'logo.png')
-        '/path/to/current/directory/images/logo.png'
+        '/path/to/project/images/logo.png'
     """
-    current_dir = os.getcwd()
-    parent_dir = os.path.dirname(current_dir)
-    folder_path = os.path.join(parent_dir, folder_name)
+    folder_path = os.path.join(PROJECT_ROOT, folder_name)
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
     file_path = os.path.join(folder_path, file_name)
