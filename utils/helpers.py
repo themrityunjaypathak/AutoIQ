@@ -21,11 +21,17 @@ def km_driven_cleaner(value):
         150000
         >>> km_driven_cleaner("12k")
         12000
+
+    Raises:
+        ValueError: If value does not end with 'L' or 'k'.
     """
-    if value.strip().endswith("L"):
+    value = value.strip()
+    if value.endswith("L"):
         return round(float(value.replace("L", "")) * 100000)
-    else:
+    elif value.endswith("k"):
         return round(float(value.replace("k", "")) * 1000)
+    else:
+        raise ValueError(f"Unrecognized km_driven format: {value!r}")
 
 
 def price_cleaner(value):
@@ -51,8 +57,14 @@ def price_cleaner(value):
         550000
         >>> price_cleaner("1.2Crore")
         12000000
+
+    Raises:
+        ValueError: If value does not end with 'lakh' or 'Crore'.
     """
-    if value.strip().endswith("lakh"):
+    value = value.strip()
+    if value.endswith("lakh"):
         return round(float(value.replace("lakh", "")) * 100000)
-    else:
+    elif value.endswith("Crore"):
         return round(float(value.replace("Crore", "")) * 10000000)
+    else:
+        raise ValueError(f"Unrecognized price format: {value!r}")
