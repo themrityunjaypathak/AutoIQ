@@ -1,3 +1,25 @@
+/* Font Face Section */
+@font-face {
+    font-family: "Satoshi";
+    src: url("fonts/Satoshi-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Satoshi";
+    src: url("fonts/Satoshi-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Satoshi";
+    src: url("fonts/Satoshi-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: swap;
+}
+
 /* Global CSS */
 * {
     margin: 0;
@@ -5,12 +27,24 @@
     box-sizing: border-box;
 }
 
+/* Visually Hidden (kept for screen readers only) */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 /* Body Section */
 body {
-    font-family: "Chillax", sans-serif;
-    letter-spacing: -1px;
+    font-family: "Satoshi", sans-serif;
+    letter-spacing: -0.6px;
     background-color: #FBEFEF;
-    color: #1A2421;
 }
 
 body::-webkit-scrollbar {
@@ -30,7 +64,7 @@ body::-webkit-scrollbar {
     padding: 12px 2%;
     font-size: 17px;
     background-color: #F9DFDF;
-    border-bottom: 1px solid #A6AEBF;
+    border-bottom: 1px solid #CBCBCB;
     z-index: 99999;
 }
 
@@ -71,7 +105,7 @@ body::-webkit-scrollbar {
 
 .menu a {
     text-decoration: none;
-    color: #1A2421;
+    color: #2C3947;
 }
 
 .menu a:hover {
@@ -80,16 +114,20 @@ body::-webkit-scrollbar {
 
 /* Star Button Section */
 .star-button {
+    display: inline-flex;
+    align-items: center;
     text-decoration: none;
     padding: 8px 12px;
     cursor: pointer;
     background-color: #FE0A0B;
     color: white;
-    border-radius: 100px;
+    border-radius: 50px;
 }
 
-.star-button i {
-    margin-right: 6px;
+.star-button .fa-star {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
 }
 
 .star-button:hover .fa-star {
@@ -97,14 +135,18 @@ body::-webkit-scrollbar {
     cursor: pointer;
 }
 
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
+/* Menu Toggle Section */
+.menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 8px 10px;
+    font-size: 17px;
+    background-color: #FE0A0B;
+    color: white;
+    border: 1px solid #FE0A0B;
+    border-radius: 8px;
 }
 
 /* Container Section */
@@ -123,7 +165,7 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    transform: translate(0%, 22.5%);
+    transform: translate(0%, 25%);
 }
 
 .hero-image {
@@ -148,6 +190,7 @@ body::-webkit-scrollbar {
     max-width: 500px;
     padding: 12px;
     background-color: #F9DFDF;
+    border: 1px solid #CBCBCB;
     border-radius: 10px;
 }
 
@@ -157,7 +200,7 @@ body::-webkit-scrollbar {
     flex-direction: column;
     gap: 10px;
     width: 100%;
-    color: #1A2421;
+    color: #2C3947;
     border-radius: 10px;
 }
 
@@ -169,13 +212,13 @@ input[type="text"],
 input[type="number"],
 select {
     width: 100%;
-    font-family: "Chillax", sans-serif;
-    letter-spacing: -1px;
+    font-family: "Satoshi", sans-serif;
+    letter-spacing: -0.6px;
     font-size: medium;
     padding: 10px;
     background-color: white;
-    color: #1A2421;
-    border: 1px solid #A6AEBF;
+    color: #2C3947;
+    border: 1px solid #CBCBCB;
     border-radius: 10px;
 }
 
@@ -183,7 +226,7 @@ input[type="text"]:focus,
 input[type="number"]:focus,
 select:focus {
     outline: none;
-    border: 1px solid #1A2421;
+    border: 1px solid #2C3947;
 }
 
 .owner {
@@ -202,14 +245,17 @@ select:focus {
 }
 
 .owner label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     user-select: none;
     cursor: pointer;
     font-size: medium;
     text-align: center;
-    padding: 6px 0;
+    padding: 6px;
     background-color: white;
-    color: #1A2421;
-    border: 1px solid #A6AEBF;
+    color: #2C3947;
+    border: 1px solid #CBCBCB;
     border-radius: 100px;
     transition: 0.3s all ease-in-out;
 }
@@ -228,29 +274,42 @@ select:focus {
 }
 
 .form-button button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     user-select: none;
     cursor: pointer;
-    font-family: "Chillax", sans-serif;
-    letter-spacing: -1px;
+    font-family: "Satoshi", sans-serif;
+    letter-spacing: -0.6px;
     font-size: medium;
     text-align: center;
     padding: 10px;
     width: 100%;
     background-color: white;
-    color: #1A2421;
-    border: 1px solid #A6AEBF;
+    color: #2C3947;
+    border: 1px solid #CBCBCB;
     border-radius: 10px;
     transition: all 0.3s ease-in-out;
 }
 
-.form-button i {
-    margin-right: 6px;
+.form-button button i {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 10px;
 }
 
 .form-button button:hover {
     background-color: #FE0A0B;
     color: white;
     border: 1px solid #FE0A0B;
+}
+
+.form-button button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    background-color: white;
+    color: #2C3947;
+    border: 1px solid #CBCBCB;
 }
 
 /* Prediction Result */
@@ -262,7 +321,7 @@ select:focus {
     width: 100%;
     margin-top: 10px;
     font-size: medium;
-    color: #1A2421;
+    color: #2C3947;
     word-wrap: break-word;
 }
 
@@ -274,7 +333,7 @@ select:focus {
     width: 100%;
     margin-top: 10px;
     font-size: medium;
-    color: #1A2421;
+    color: #2C3947;
     word-wrap: break-word;
 }
 
@@ -319,6 +378,10 @@ select:focus {
         transform: translate(0, 120px);
     }
 
+    .hero-image {
+        flex: none;
+    }
+
     .hero-image img {
         min-width: 0;
         max-width: 500px;
@@ -340,16 +403,40 @@ select:focus {
 
     .menu {
         display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        width: 100%;
+        background-color: #F9DFDF;
+        border-bottom: 1px solid #CBCBCB;
+    }
+
+    .menu.open {
+        display: flex;
+    }
+
+    .menu a {
+        width: 100%;
+        padding: 12px 20px;
+        box-sizing: border-box;
+    }
+
+    .menu-toggle {
+        display: flex;
     }
 
     .navbar {
         padding: 12px 20px;
+        position: relative;
     }
 
     .form {
         flex-direction: column;
         gap: 30px;
-        transform: translate(0, 110px);
+        transform: translate(0, 20px);
     }
 
     .hero-image img {
@@ -381,7 +468,7 @@ select:focus {
 
     .form {
         flex-direction: column;
-        transform: translate(0, 100px);
+        transform: translate(0, 20px);
         padding-bottom: 15px;
     }
 
