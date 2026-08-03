@@ -5,16 +5,6 @@
 # The "AS builder" means this stage will be named "builder" and used later in the final stage to copy built dependencies.
 FROM python:3.11-slim AS builder
 
-# Install required system packages for Python libraries.
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    g++ \
-    python3-dev \
-    libopenblas-dev \
-    liblapack-dev \
-    gfortran \
- && rm -rf /var/lib/apt/lists/*
-
 # Set the working directory to /app inside the container.
 # All future commands (COPY, RUN, CMD) will be executed from here.
 WORKDIR /app
@@ -28,9 +18,6 @@ COPY requirements.txt .
 RUN mkdir -p /install && \
     pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --prefix=/install -r requirements.txt
-
-# Copies all the remaining project files (FastAPI, HTML, CSS, JS, etc.) into /app.
-COPY . .
 
 # ---- Stage 2: Final Image ----
 
@@ -47,6 +34,10 @@ COPY --from=builder /install /usr/local
 
 # Copy the Application Source code from the builder stage.
 COPY . .
+
+# Create a non-root user and switch to it, so the app doesn't run as root.
+RUN useradd -u 1000 appuser
+USER appuser
 
 # Expose FastAPI port, so it can be accessed from outside the container.
 EXPOSE 8000
