@@ -2,22 +2,22 @@
 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-E34F26?style=flat&logo=html5&logoColor=white)](https://themrityunjaypathak.github.io/AutoIQ/)
-[![API Docs](https://img.shields.io/badge/API-Docs-009688?style=flat&logo=fastapi&logoColor=white)](https://autoiq.onrender.com/docs)
-[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-Image-2496ED?style=flat&logo=docker&logoColor=white)](https://hub.docker.com/r/themrityunjaypathak/autoiq)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-FF6D00?style=flat&logo=html5&logoColor=white)](https://themrityunjaypathak.github.io/AutoIQ/)
+[![API Docs](https://img.shields.io/badge/API-Docs-05998B?style=flat&logo=fastapi&logoColor=white)](https://autoiq.onrender.com/docs)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-Image-1D63ED?style=flat&logo=docker&logoColor=white)](https://hub.docker.com/r/themrityunjaypathak/autoiq)
 [![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![Pandas](https://img.shields.io/badge/Pandas-4420C7?style=flat&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
-[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/stable/)
-[![Selenium](https://img.shields.io/badge/Selenium-43B02A?style=flat&logo=selenium&logoColor=white)](https://www.selenium.dev/)
-[![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)](https://git-scm.com/)
+[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-F89939?style=flat&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/stable/)
+[![Selenium](https://img.shields.io/badge/Selenium-4EB436?style=flat&logo=selenium&logoColor=white)](https://www.selenium.dev/)
+[![Git](https://img.shields.io/badge/Git-F05133?style=flat&logo=git&logoColor=white)](https://git-scm.com/)
 
 </div>
 
-<a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="AutoIQ" src="https://github.com/user-attachments/assets/77b6df46-2625-4af4-94dc-27a42d4fe005"></a>
+<a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="AutoIQ" src="https://github.com/user-attachments/assets/b4437a20-df79-43a7-b70d-363d52de8b1e"></a>
 
 ## Table of Contents
-- [Problem Statement](#problem-statement)
-- [Overview](#overview)
+- [Problem](#problem)
+- [Solution](#solution)
 - [Workflow](#workflow)
 - [Impact](#impact)
 - [Dataset](#dataset)
@@ -32,32 +32,38 @@
 
 <hr>
 
-## Problem Statement
+## Problem
 - In the used-car market, buyers and sellers often struggle to determine a fair price for a vehicle.
 - Incorrect pricing leads to revenue loss when undervalued and slow sales when overpriced.
 - The goal is to provide accurate and transparent pricing by analyzing real-world market listings.
 
 <hr>
 
-## Overview
-- Built and deployed an end-to-end machine learning pipeline to predict used-car prices from real market data.
-- Collected and processed 2,800+ listings from Cars24 using Selenium and BeautifulSoup.
-- Trained a tuned stacking ensemble of XGB, RF, GB models with Scikit-learn pipelines to prevent data leakage.
-- Exposed the model through a Dockerized FastAPI service with a live frontend for real-time price predictions.
+## Solution
+- Built and deployed an ML pipeline predicting used-car prices from 2,800+ real Cars24 listings.
+- Benchmarked 6 models and a stacking ensemble, then selected a tuned XGBoost with leakage-free pipelines.
+- Delivered price ranges via quantile regression instead of point estimates, giving users honest uncertainty.
+- Deployed the model through a Dockerized FastAPI service with a live frontend for real-time predictions.
 
 <hr>
 
 ## Workflow
 
-<img title="Workflow Diagram" src="https://github.com/user-attachments/assets/72b1e18f-3211-415b-8787-935ca66f6481">
+<details>
+<summary>Click Here to view Workflow Diagram</summary>
+<br>
+
+<img title="Workflow Diagram" src="https://github.com/user-attachments/assets/203c82e4-69bf-4cff-ad9a-92ee6f943882">
+
+</details>
 
 <hr>
 
 ## Impact
-- Cut MAE by 31% (₹1,23,193 → ₹85,309) and improved R² from 0.77 to 0.88 over a Linear Regression baseline.
-- Reduced MAE variability by 64% (std ₹6,435 → ₹2,321) through tuning, producing more consistent predictions.
-- Validated on a held-out test set, achieving MAE of ₹88,313 and R² of 0.88 on completely unseen data.
-- Delivers data-driven price estimates that support more informed buying and selling decisions.
+- Reduced prediction error by 31% over a LinearRegression baseline, tuning an XGBoost pipeline that cut MAE from ₹1,23,193 to ₹85,281 and raised R<sup>2</sup> from 0.77 to 0.88.
+- Improved prediction consistency by 62% over the baseline model, lowering MAE variability from ₹6,435 to ₹2,426 across all car segments.
+- Validated the model on real-world unseen data, achieving MAE of ₹87,723, R<sup>2</sup> of 0.87, and MAPE of \~14%, confirming it generalizes well instead of overfitting to training data.
+- Replaced single-number predictions with price ranges using quantile regression, giving buyers and sellers honest uncertainty bounds to negotiate with.
 
 <hr>
 
@@ -70,7 +76,7 @@
 
 <details>
 <summary>Click Here to view more Details</summary>
-&nbsp;
+<br>
 
 **Input :** URL of a Cars24 listing page to scrape.
 
@@ -105,7 +111,7 @@
 
 <details>
 <summary>Click Here to view more Details</summary>
-&nbsp;
+<br>
 
 **Input :** BeautifulSoup object (`soup`) containing the fully-rendered HTML of a Cars24 listing page.
 
@@ -116,7 +122,7 @@
 
 <details>
 <summary>Click to view the HTML Element Snapshot</summary>
-&nbsp;
+<br>
 <img title="cars24" src="https://github.com/user-attachments/assets/66524e3d-4c26-4edc-8f8a-40b17016eda4">
 </details>
 
@@ -152,7 +158,7 @@
 
 <details>
 <summary>Click to view the HTML Element Snapshot</summary>
-&nbsp;
+<br>
 <img title="cars24" src="https://github.com/user-attachments/assets/5185f66b-3de6-4354-ae11-fcb0b8fbb793">
 </details>
 
@@ -187,7 +193,7 @@
 
 <details>
 <summary>Click to view the HTML Element Snapshot</summary>
-&nbsp;
+<br>
 <img title="cars24" src="https://github.com/user-attachments/assets/9a974eca-b39b-4e9a-bdc3-ff5abe6c9491">
 </details>
 
@@ -202,7 +208,7 @@
 
 <details>
 <summary>Click to view the HTML Element Snapshot</summary>
-&nbsp;
+<br>
 <img title="cars24" src="https://github.com/user-attachments/assets/fbac495f-6894-41dc-b469-2d23e90e3610">
 </details>
 
@@ -221,7 +227,7 @@
 
 <details>
 <summary>Click Here to view more Details</summary>
-&nbsp;
+<br>
 
 **Input :** List of URLs for individual car listings (`link` from the previous DataFrame).
 
@@ -242,7 +248,7 @@
 
 <details>
 <summary>Click to view the HTML Element Snapshot</summary>
-&nbsp;
+<br>
 <img title="cars24" src="https://github.com/user-attachments/assets/80a81a7e-ffd6-4413-ab74-650dbf63afc6">
 </details>
 
@@ -320,17 +326,19 @@ df.head()
 
 <details>
 <summary>Click Here to view more Details</summary>
-&nbsp;
+<br>
 
 The final dataset consists of 2,800+ unique car listings, with each record containing :
 
-- `model_name` : Model name of the car (2014 Hyundai Grand i10, etc).         
-- `fuel_type` : Type of fuel the car uses (Petrol, Diesel, CNG, Electric).        
-- `transmission` : Type of transmission the car has (Automatic or Manual).           
-- `owner` : Number of previous owners (1st owner, 2nd owner, 3rd owner, etc).
-- `engine_capacity` : Size of the engine (in cc).                              
-- `km_driven` : Total distance traveled by the car (in km).                   
-- `price` : Selling price of the car (target variable).
+| Column | Description |
+|:---|:---|
+| `model_name` | Model name of car (2014 Hyundai Grand i10, etc.) |
+| `fuel_type` | Fuel type (Petrol, Diesel, CNG, Electric) |
+| `transmission` | Transmission type (Automatic or Manual) |
+| `owner` | Previous owners count (1st owner, 2nd owner, 3rd owner, etc.) |
+| `engine_capacity` | Engine size (in cc) |
+| `km_driven` | Total distance traveled (in km) |
+| `price` | Selling price (target variable) |
 
 </details>
 
@@ -363,11 +371,12 @@ This project uses a `.env` file to store configuration settings like model paths
 - Stores environment variables in plain text.
 ```bash
 # .env
-ENV=environment_name
-MAE=mean_absolute_error
-PIPE_PATH=pipeline_path
-MODEL_FREQ_PATH=model_freq_path
-ALLOWED_ORIGINS=list_of_URLs_that_are_allowed_to_access_the_API
+ENV=dev_or_prod
+MODEL_FREQ_PATH=path/to/model_freq.pkl
+PIPE_PATH=path/to/pipe.pkl
+LOWER_PIPE_PATH=path/to/lower_pipe.pkl
+UPPER_PIPE_PATH=path/to/upper_pipe.pkl
+ALLOWED_ORIGINS=comma_separated_list_of_allowed_origins
 ```
 
 > [!IMPORTANT]
@@ -375,43 +384,44 @@ ALLOWED_ORIGINS=list_of_URLs_that_are_allowed_to_access_the_API
 > 
 > Add `.env` to `.gitignore` and `.dockerignore` to keep it private.
 
-#### `config.py` file
-- Load and validate environment variables from `.env`.
-- Uses Pydantic `BaseSettings` to read environment variables, validate types and provide easy access.
-
-#### `main.py` file
-- Uses `settings` from `config.py` in FastAPI.
-- Imports the `settings` object to provide API's metadata dynamically from `.env`.
-
 ### 4. Run the Docker Container
 Start the application using Docker. This will run the FastAPI server and handle all the dependencies automatically.
 ```bash
-docker run --env-file .env -p 8000:8000 your_image_name \
-   uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+docker run --env-file .env -p 8000:8000 --name your_container_name your_image_name
 ```
 
 > [!NOTE]
 > `api.main` : Refers to the main.py file inside the api folder.
 > 
 > `app` : The FastAPI instance defined in your code.
-> 
-> `--reload` : Automatically reloads when code changes (development only).
 
 ### 5. Access the FastAPI Server
 Once the container is running, open your browser and navigate to :
 ```bash
 http://127.0.0.1:8000/docs
 ```
+
 This opens the Swagger UI for testing the API endpoints.
+
+> [!IMPORTANT]
+> 
+> If running the API locally :
+> 
+> ```bash
+> uvicorn api.main:app --reload --host 127.0.0.1 --port 8000
+> ```
+> Use the same host (`127.0.0.1`/`localhost`) for both the frontend and `ALLOWED_ORIGINS` in `.env`.
+> 
+> A mismatch makes browsers treat them as different origins and CORS will fail.
 
 Access the live API [here](https://autoiq.onrender.com/docs) or Click on the Image below.
 
-<a href="https://autoiq.onrender.com/docs"><img title="swagger-ui" src="https://github.com/user-attachments/assets/ddb6edf0-4434-4282-a08d-83947c74e108"></a>
+<a href="https://autoiq.onrender.com/docs"><img title="swagger-ui" src="https://github.com/user-attachments/assets/920ea2c9-231e-47f2-a1cc-d6ea9541481e"></a>
 
 ### 6. Stop the Docker Container
 When you're done using the application, stop the running container.
 ```bash
-docker stop your_image_name
+docker stop your_container_name
 ```
 
 <hr>
@@ -492,7 +502,7 @@ http://127.0.0.1:8000/predict
 - **Response Body (JSON) :** This confirms that the API is running and returns the result of your API call.
 ```json
 {
-  "output": "₹9,69,000 to ₹11,50,000"
+  "output": "₹7,81,412 to ₹12,66,018"
 }
 ```
 
@@ -536,13 +546,6 @@ docker build -t your_image_name .
 - When you run a Docker image, it becomes a Docker container.
 - It is a live instance of that image, running your application in an isolated environment.
 
-#### For Development
-```bash
-docker run --env-file .env -p 8000:8000 your_image_name \
-    uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-#### For Production
 ```bash
 docker run --env-file .env -p 8000:8000 your_image_name
 ```
@@ -572,7 +575,7 @@ docker login
 - Tagging prepares the image for upload to Docker Hub.
 
 ```bash
-docker tag your_image_name your-dockerhub-username/your_image_name:latest
+docker tag your_image_name your_dockerhub_username/your_image_name:latest
 ```
 
 #### Push the Image to Docker Hub
@@ -581,27 +584,27 @@ docker tag your_image_name your-dockerhub-username/your_image_name:latest
 - Anyone can now pull and run the image without building it locally.
 
 ```bash
-docker push your-dockerhub-username/your_image_name:latest
+docker push your_dockerhub_username/your_image_name:latest
 ```
 
 </details>
 
 Access the Docker Hub [here](https://hub.docker.com/r/themrityunjaypathak/autoiq) or Click on the Image below.
 
-<a href="https://hub.docker.com/r/themrityunjaypathak/autoiq"><img title="docker-hub" src="https://github.com/user-attachments/assets/dc48f82d-5e92-4433-8cc3-cdc5b9e6cab6"></a>
+<a href="https://hub.docker.com/r/themrityunjaypathak/autoiq"><img title="docker-hub" src="https://github.com/user-attachments/assets/c118694b-ff6e-43ee-b358-9cfddfdbf7d4"></a>
 
 ### 8. Pull and Run Anywhere
 - Once pushed, anyone can pull your image from Docker Hub and run it.
 - This ensures that the application behaves the same way across all systems.
 
 ```bash
-docker pull your-dockerhub-username/your_image_name:latest
+docker pull your_dockerhub_username/your_image_name:latest
 ```
 
 - After pulling the Docker image, you can run it to create a Docker container from it.
 
 ```bash
-docker run --env-file .env -p 8000:8000 your-dockerhub-username/your_image_name:latest
+docker run --env-file .env -p 8000:8000 your_dockerhub_username/your_image_name:latest
 ```
 
 ### 9. Verify the Container is Running
@@ -623,17 +626,17 @@ docker stop container_id
 
 ## Application
 
-The frontend application files are in the project root :
+The frontend application files are in the `frontend/` folder :
 - `index.html` : This file defines the structure and layout of the web page.
 - `style.css` : This file handles the visual appearance of the web page.
 - `script.js` : This file communicates between the web page and the REST API.
 
 > [!IMPORTANT]
-> Remember to update the API URL in `script.js` when deploying on GitHub Pages to get real-time predictions.  
+> If you clone this repo and want `script.js` to hit your local API instead of the live one, update the fetch URL.  
 >
 > Change from :  
 > ```js
-> const fetchPromise = fetch("http://127.0.0.1:8000/predict", {
+> const fetchPromise = fetch("https://autoiq.onrender.com/predict", {
 >      method: "POST",
 >      headers: { "Content-Type": "application/json" },
 >      body: JSON.stringify(data),
@@ -642,7 +645,7 @@ The frontend application files are in the project root :
 >   
 > To :  
 > ```js
-> const fetchPromise = fetch("https://your_api_name.onrender.com/predict", {
+> const fetchPromise = fetch("http://127.0.0.1:8000/predict", {
 >     method: "POST",
 >     headers: { "Content-Type": "application/json" },
 >     body: JSON.stringify(data),
@@ -659,11 +662,9 @@ The frontend application files are in the project root :
 > 
 > If the API was inactive, the first prediction may take a few seconds while the server spins back up.
 
-You can open `index.html` directly in your browser or serve it via a local HTTP server (like VS Code Live Server).
-
 Access the live website [here](https://themrityunjaypathak.github.io/AutoIQ/) or Click on the Image below.
 
-<a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="frontend-ui" src="https://github.com/user-attachments/assets/a1957a47-d428-44aa-a790-e5abf02cd982"></a>
+<a href="https://themrityunjaypathak.github.io/AutoIQ/"><img title="frontend-ui" src="https://github.com/user-attachments/assets/2e2b5c1e-252f-46bb-9eaa-7fe0e34b24ce"></a>
 
 <hr>
 
@@ -695,7 +696,8 @@ cars.head()
 # Creating Features and Target Variable
 X = cars.drop('price', axis=1)
 y = cars['price']
-
+```
+```python
 # Splitting Data into Training and Testing Set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 ```
@@ -761,7 +763,7 @@ models = {
 }
 ```
 ```python
-# Computing Average Error and R2-Score through Cross-Validation
+# Computing Metrics through Cross-Validation
 results = {}
 
 for name, model in models.items():
@@ -783,13 +785,13 @@ for name, model in models.items():
     print(f'Average Error : {-cv_results['test_mae'].mean():.2f}')
     print(f'Standard Deviation of Error : {cv_results['test_mae'].std():.2f}')
     print(f'Average R2-Score : {cv_results['test_r2'].mean():.2f}')
-    print(f'Standard Deviation of R2-Score : {cv_results['test_r2'].std():.2f}')
+    print(f'Error Stability (CV of MAE) : {(cv_results['test_mae'].std() / -cv_results['test_mae'].mean()) * 100:.2f}%')
 ```
 </details>
 
 <details>
 <summary>Click Here to view Analysis</summary>
-&nbsp;
+<br>
 
 ```
 Model : LR
@@ -797,103 +799,170 @@ Model : LR
 Average Error : 123193.35
 Standard Deviation of Error : 6435.48
 Average R2-Score : 0.77
-Standard Deviation of R2-Score : 0.01
+Error Stability (CV of MAE) : 5.22%
 
 Model : KNN
 ----------------------------------------
 Average Error : 115518.58
 Standard Deviation of Error : 3843.92
 Average R2-Score : 0.79
-Standard Deviation of R2-Score : 0.00
+Error Stability (CV of MAE) : 3.33%
 
 Model : DT
 ----------------------------------------
 Average Error : 116187.61
 Standard Deviation of Error : 4254.52
 Average R2-Score : 0.76
-Standard Deviation of R2-Score : 0.03
+Error Stability (CV of MAE) : 3.66%
 
 Model : RF
 ----------------------------------------
 Average Error : 90937.17
 Standard Deviation of Error : 2666.87
 Average R2-Score : 0.86
-Standard Deviation of R2-Score : 0.01
+Error Stability (CV of MAE) : 2.93%
 
 Model : GB
 ----------------------------------------
-Average Error : 98200.66
-Standard Deviation of Error : 3416.36
+Average Error : 98130.73
+Standard Deviation of Error : 3453.66
 Average R2-Score : 0.85
-Standard Deviation of R2-Score : 0.01
+Error Stability (CV of MAE) : 3.52%
 
 Model : XGB
 ----------------------------------------
-Average Error : 91845.00
-Standard Deviation of Error : 2955.45
+Average Error : 90899.92
+Standard Deviation of Error : 1913.66
 Average R2-Score : 0.86
-Standard Deviation of R2-Score : 0.02
+Error Stability (CV of MAE) : 2.11%
 ```
 
-<img title="model-comparison" src="https://github.com/user-attachments/assets/8224d2dc-3196-4cee-8c12-1511ba3af435">
+<img title="model-comparison" src="https://github.com/user-attachments/assets/d7805ffa-692c-48cc-af79-9ac3915f30a1">
 
 </details>
 
 <hr>
 
-### 5. Creating Stacking Regressor
+### 5. Evaluate StackingRegressor Model
 
 <details>
 <summary>Click Here to view Code Snippet</summary>
 <br>
 
 ```python
-# Creating Object of the Models
-rf = RandomForestRegressor(random_state=42, n_jobs=-1)
-gb = GradientBoostingRegressor(random_state=42)
-xgb = XGBRegressor(random_state=42, n_jobs=-1)
-meta_model = ElasticNet(max_iter=10000, random_state=42)
+# Evaluating StackingRegressor (RF + XGB + GB -> ElasticNet meta-learner)
+from sklearn.ensemble import StackingRegressor
+from sklearn.linear_model import ElasticNet
 
-# Assigning Base Model for StackingRegressor
-base_model = [('rf', rf),('xgb', xgb),('gb', gb)]
+stack_estimators = [
+    ('rf', RandomForestRegressor(random_state=42, n_jobs=-1)),
+    ('xgb', XGBRegressor(random_state=42, n_jobs=-1)),
+    ('gb', GradientBoostingRegressor(random_state=42))
+]
 
-# Structure of StackingRegressor
-stack = StackingRegressor(
-    estimators=base_model, 
-    final_estimator=meta_model, 
-    passthrough=False, 
-    cv=k, n_jobs=-1
+stack_model = StackingRegressor(
+    estimators=stack_estimators,
+    final_estimator=ElasticNet(random_state=42),
+    n_jobs=-1
 )
 
-# Final Pipeline with StackingRegressor
+stack_pipe = Pipeline(steps=[
+    ('preprocessor', ctf),
+    ('model', stack_model)
+])
+
+k = KFold(n_splits=5, shuffle=True, random_state=42)
+
+stack_cv_results = cross_validate(estimator=stack_pipe, X=X_train, y=y_train, cv=k, scoring={'mae':'neg_mean_absolute_error','r2':'r2'}, n_jobs=-1, return_train_score=False)
+
+stack_mae = -stack_cv_results['test_mae'].mean()
+stack_std = stack_cv_results['test_mae'].std()
+stack_r2 = stack_cv_results['test_r2'].mean()
+
+print(f'Model : StackingRegressor')
+print('-'*40)
+print(f'Average Error : {stack_mae:.2f}')
+print(f'Standard Deviation of Error : {stack_std:.2f}')
+print(f'Average R2-Score : {stack_r2:.2f}')
+print(f'Error Stability (CV of MAE) : {(stack_std / stack_mae) * 100:.2f}%')
+print('')
+```
+
+</details>
+
+<details>
+<summary>Click Here to view Analysis</summary>
+<br>
+
+```
+Model : StackingRegressor
+----------------------------------------
+Average Error : 87884.49
+Standard Deviation of Error : 1488.70
+Average R2-Score : 0.87
+Error Stability (CV of MAE) : 1.69%
+```
+</details>
+
+<hr>
+
+### 6. Choosing a Single Model
+
+<details>
+<summary>Click Here to view Code Snippet</summary>
+<br>
+
+```python
+# Creating Object of the Model
+xgb = XGBRegressor(random_state=42, n_jobs=-1)
+
+# Final Pipeline with XGBRegressor
 pipe = Pipeline(steps=[
-    ('preprocessor', ctf), 
-    ('model', stack) 
+    ('preprocessor', ctf),
+    ('model', xgb)
 ])
 ```
 ```python
-# Average Error and R2-Score through Cross-Validation
+# Computing Metrics through Cross-Validation
 cv_results = cross_validate(estimator=pipe, X=X_train, y=y_train, cv=k, scoring={'mae':'neg_mean_absolute_error','r2':'r2'}, n_jobs=-1)
 print(f"Average Error : {-cv_results['test_mae'].mean():.2f}")
 print(f"Standard Deviation of Error : {cv_results['test_mae'].std():.2f}")
 print(f"Average R2-Score : {cv_results['test_r2'].mean():.2f}")
-print(f"Standard Deviation of R2-Score : {cv_results['test_r2'].std():.2f}")
+print(f"Error Stability (CV of MAE) : {(cv_results['test_mae'].std() / -cv_results['test_mae'].mean()) * 100:.2f}%")
 ```
 </details>
 
 <details>
 <summary>Click Here to view Analysis</summary>
-&nbsp;
+<br>
 
 ```
-Average Error : 88265.66
-Standard Deviation of Error : 1838.92
-Average R2-Score : 0.87
-Standard Deviation of R2-Score : 0.01
+Average Error : 90899.92
+Standard Deviation of Error : 1913.66
+Average R2-Score : 0.86
+Error Stability (CV of MAE) : 2.11%
 ```
 
-<img title="stacking-regressor" src="https://github.com/user-attachments/assets/758c669c-bdb8-4423-8ee8-565cf1158481">
-
+- The graph shows model performance by average error (lower is better) and average R<sup>2</sup> (higher is better).
+- RandomForestRegressor and XGBRegressor are the top performers (\~₹90,900 MAE & R<sup>2</sup> 0.86).
+- A StackingRegressor was also tried, improving MAE by only \~3% for 3x the model complexity and inference time.
+```md
+  [StackingRegressor]
+   RF     XGB     GB
+    \      |      /
+     \     |     /
+      \    |    /
+       ▼   ▼   ▼
+      ElasticNet
+    [meta-learner]
+          │
+          ▼
+    Final Prediction
+```
+- Not worth the trade-off for this project's scope, so **XGBRegressor** is used directly :
+    - It ties RF on error but has the lowest standard deviation of error (XGB's ₹1,913 vs RF's ₹2,667),
+    - It means more consistent predictions across folds.
+    - Being a single model, it's also simpler to tune, explain, and serve than a 3-model stack.
 </details>
 
 <hr>
@@ -904,9 +973,9 @@ Standard Deviation of R2-Score : 0.01
 
 <details>
 <summary>Click Here to view Analysis</summary>
-&nbsp;
+<br>
 
-| <img title="ap-plot" src="https://github.com/user-attachments/assets/03fd094a-d39c-4215-9ffc-2acbbe9840ea"> | <img title="ap-plot" src="https://github.com/user-attachments/assets/956df3db-18fc-408b-ae22-678deba1a07a"> |
+| <img title="ap-plot" src="https://github.com/user-attachments/assets/00280bf2-cea3-4444-8687-778ea0f44bb3"> | <img title="ap-plot" src="https://github.com/user-attachments/assets/5dff1bed-780c-40bc-9593-0c3602e0bc29"> |
 |---|---|
 
 </details>
@@ -915,11 +984,11 @@ Standard Deviation of R2-Score : 0.01
 
 <details>
 <summary>Click Here to view Analysis</summary>
-&nbsp;
+<br>
 
-| R²-Score Curve | Error Curve |
+| R<sup>2</sup>-Score Curve | Error Curve |
 |---|---|
-| <img title="lr-curve" src="https://github.com/user-attachments/assets/58316e04-c1b7-4b2c-9ed9-bd683905f639"> | <img title="lr-curve" src="https://github.com/user-attachments/assets/eca10b15-b3c9-4a10-ac7b-e31d6c10ae8b"> |
+| <img title="lr-curve" src="https://github.com/user-attachments/assets/1fdfdc9f-d4f9-43fa-a344-a1e2a96a21bc"> | <img title="lr-curve" src="https://github.com/user-attachments/assets/36c735f2-bc31-4792-b495-aed22af51f25"> |
 
 </details>
 
@@ -934,43 +1003,49 @@ Standard Deviation of R2-Score : 0.01
 ```python
 # Parameter Distribution
 param_dist = {
-    'model__rf__n_estimators': [200, 300],
-    'model__rf__max_depth': [10, 20],
-    'model__rf__min_samples_leaf': [3, 5],
-    'model__rf__min_samples_split': [5, 7],
-    'model__xgb__n_estimators': [200, 300],
-    'model__xgb__learning_rate': [0.05, 0.1],
-    'model__xgb__max_depth': [2, 4],
-    'model__xgb__subsample': [0.5, 0.75],
-    'model__xgb__colsample_bytree': [0.5, 0.75],
-    'model__gb__n_estimators': [100, 200],   
-    'model__gb__learning_rate': [0.05, 0.1],  
-    'model__gb__max_depth': [2, 4],       
-    'model__gb__subsample': [0.5, 0.75],
-    'model__final_estimator__alpha': [0.1, 10.0],
-    'model__final_estimator__l1_ratio': [0.0, 1.0]
+    'model__n_estimators': [200, 300, 400],
+    'model__learning_rate': [0.03, 0.05, 0.1],
+    'model__max_depth': [2, 3, 4],
+    'model__subsample': [0.5, 0.75, 1.0],
+    'model__colsample_bytree': [0.5, 0.75, 1.0],
+    'model__min_child_weight': [1, 3, 5]
 }
-
+```
+```python
 # RandomizedSearchCV Object with Cross-Validation
 rcv = RandomizedSearchCV(estimator=pipe, param_distributions=param_dist, cv=k, scoring='neg_mean_absolute_error', n_iter=30, n_jobs=-1, random_state=42)
-
+```
+```python
 # Fitting the RandomizedSearchCV Object
 rcv.fit(X_train, y_train)
-
+```
+```python
+# Best Parameter
+rcv.best_params_
+```
+```python
 # Best Estimator
 best_model = rcv.best_estimator_
+```
+```python
+# Computing Metrics through Cross-Validation after Tuning
+cv_results = cross_validate(estimator=best_model, X=X_train, y=y_train, cv=k, scoring={'mae':'neg_mean_absolute_error','r2':'r2'}, n_jobs=-1)
+print(f"Average Error : {-cv_results['test_mae'].mean():.2f}")
+print(f"Standard Deviation of Error : {cv_results['test_mae'].std():.2f}")
+print(f"Average R2-Score : {cv_results['test_r2'].mean():.2f}")
+print(f"Error Stability (CV of MAE) : {(cv_results['test_mae'].std() / -cv_results['test_mae'].mean()) * 100:.2f}%")
 ```
 </details>
 
 <details>
 <summary>Click Here to view Analysis</summary>
-&nbsp;
+<br>
 
 ```
-Average Error : 85308.59
-Standard Deviation of Error : 2320.79
+Average Error : 85281.35
+Standard Deviation of Error : 2426.39
 Average R2-Score : 0.88
-Standard Deviation of R2-Score : 0.01
+Error Stability (CV of MAE) : 2.85%
 ```
 </details>
 
@@ -982,11 +1057,11 @@ Standard Deviation of R2-Score : 0.01
 
 <details>
 <summary>Click Here to view Analysis</summary>
-&nbsp;
+<br>
 
 | Before Tuning | After Tuning |
 |---|---|
-| <img title="ap-plot" src="https://github.com/user-attachments/assets/03fd094a-d39c-4215-9ffc-2acbbe9840ea"> | <img title="ap-plot" src="https://github.com/user-attachments/assets/78b51241-1b65-4ec6-96a8-7a0d03e1664d"> |
+| <img title="ap-plot" src="https://github.com/user-attachments/assets/00280bf2-cea3-4444-8687-778ea0f44bb3"> | <img title="ap-plot" src="https://github.com/user-attachments/assets/6af0289a-c1da-415f-b890-7caf5fec3399"> |
 
 </details>
 
@@ -994,15 +1069,15 @@ Standard Deviation of R2-Score : 0.01
 
 <details>
 <summary>Click Here to view Analysis</summary>
-&nbsp;
+<br>
 
-| R²-Score Curve (Before Tuning) | R²-Score Curve (After Tuning) |
+| R<sup>2</sup>-Score Curve (Before Tuning) | R<sup>2</sup>-Score Curve (After Tuning) |
 |---|---|
-| <img title="lr-curve" src="https://github.com/user-attachments/assets/58316e04-c1b7-4b2c-9ed9-bd683905f639"> | <img title="lr-curve" src="https://github.com/user-attachments/assets/7fcbf45a-6b22-4be0-b175-ea4288920724"> |
+| <img title="lr-curve" src="https://github.com/user-attachments/assets/1fdfdc9f-d4f9-43fa-a344-a1e2a96a21bc"> | <img title="lr-curve" src="https://github.com/user-attachments/assets/c16236ed-019d-44c5-b262-9dec67c7c240"> |
 
 | Error Curve (Before Tuning) | Error Curve (After Tuning) |
 |---|---|
-| <img title="lr-curve" src="https://github.com/user-attachments/assets/eca10b15-b3c9-4a10-ac7b-e31d6c10ae8b"> | <img title="lr-curve" src="https://github.com/user-attachments/assets/66e6989c-93a5-443c-b3db-d7a8e7fe51d9"> |
+| <img title="lr-curve" src="https://github.com/user-attachments/assets/36c735f2-bc31-4792-b495-aed22af51f25"> | <img title="lr-curve" src="https://github.com/user-attachments/assets/7013f64c-4ae7-4f24-94f9-9804dd74d947"> |
 
 </details>
 
@@ -1017,22 +1092,84 @@ Standard Deviation of R2-Score : 0.01
 ```python
 # Model Performance on Unseen Data
 y_pred_test = best_model.predict(X_test)
-
+```
+```python
 # Mean Absolute Error and R2-Score on Unseen Data
 from sklearn.metrics import mean_absolute_error, r2_score
 print(f'Mean Absolute Error on Unseen Data : {mean_absolute_error(y_test, y_pred_test):.2f}')
 print(f'R2-Score on Unseen Data : {r2_score(y_test, y_pred_test):.2f}')
 ```
+```python
+# Mean Absolute Percentage Error on Unseen Data
+from sklearn.metrics import mean_absolute_percentage_error
+mape = mean_absolute_percentage_error(y_test, y_pred_test)
+print(f'Mean Absolute Percentage Error on Unseen Data : {mape * 100:.2f}%')
+```
 </details>
 
 <details>
 <summary>Click Here to view Analysis</summary>
-&nbsp;
+<br>
 
 ```
-Mean Absolute Error on Unseen Data : 88313.38
-R2-Score on Unseen Data : 0.88
+Mean Absolute Error on Unseen Data : 87723.02
+R2-Score on Unseen Data : 0.87
+Mean Absolute Percentage Error on Unseen Data : 13.93%
 ```
+</details>
+
+<hr>
+
+### 10. Predicting a Price Range
+
+<details>
+<summary>Click Here to view Code Snippet</summary>
+<br>
+
+```python
+# Importing GradientBoostingRegressor for Quantile Regression
+from sklearn.ensemble import GradientBoostingRegressor
+
+# Lower Bound Pipeline (10th Percentile)
+lower_pipe = Pipeline(steps=[
+    ('preprocessor', ctf),
+    ('model', GradientBoostingRegressor(loss='quantile', alpha=0.1, random_state=42))
+])
+
+# Upper Bound Pipeline (90th Percentile)
+upper_pipe = Pipeline(steps=[
+    ('preprocessor', ctf),
+    ('model', GradientBoostingRegressor(loss='quantile', alpha=0.9, random_state=42))
+])
+
+# Fitting Both Quantile Pipelines on Training Data
+lower_pipe.fit(X_train, y_train)
+upper_pipe.fit(X_train, y_train)
+
+# Predicting Lower and Upper Bounds on Unseen Data
+y_pred_lower = lower_pipe.predict(X_test)
+y_pred_upper = upper_pipe.predict(X_test)
+
+# Clamping Lower Bound at 0 as a Safety Net (Price can never be Negative)
+y_pred_lower = np.clip(y_pred_lower, a_min=0, a_max=None)
+```
+</details>
+
+<details>
+<summary>Click Here to view Analysis</summary>
+<br>
+
+- A single point prediction is not very useful on its own, a **range** is more practical for buyers/sellers.
+- The initial approach used a flat `prediction ± MAE` range, but this is flawed :
+    - MAE is one global average error, it does not scale with the price of the car.
+    - For cheap cars, `prediction - MAE` could go **negative**, which makes no sense for a price.
+    - For expensive cars, the same flat range was unrealistically tight.
+    - It also required the exact training-time MAE in `.env`, which anyone cloning the repo would not have.
+- This was replaced with two `GradientBoostingRegressor` models trained directly on the P<sub>10</sub> and P<sub>90</sub> of price.
+- Both are exported as `lower_pipe.pkl` and `upper_pipe.pkl` alongside the main model,
+- So the API loads them like any other artifact, no manual `.env` value needed.
+- The lower bound is additionally clipped at 0 in the API as a safety net.
+
 </details>
 
 <hr>
@@ -1071,7 +1208,18 @@ R2-Score on Unseen Data : 0.88
 - I implemented Scikit-learn [Pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html) and [ColumnTransformer](https://scikit-learn.org/stable/modules/generated/sklearn.compose.ColumnTransformer.html) to apply preprocessing only on training data.
 - This kept the test data completely unseen during preprocessing, preventing leakage.
 
-### Challenge 4 : Deploying the Model as an API
+### Challenge 4 : Communicating Prediction Uncertainty
+
+#### Problem
+- A single point prediction doesn't tell a buyer/seller how confident the model actually is.
+- Our initial `prediction ± MAE` range went negative for cheap cars and needed the training-time MAE in `.env`.
+
+#### Solution
+- I trained two `GradientBoostingRegressor` models on the 10th and 90th percentile of price (quantile loss).
+- The range now scales naturally with the predicted price and can't go negative, with a clip at 0 as a safety net.
+- Both models ship as `lower_pipe.pkl`/`upper_pipe.pkl`, so the range updates automatically on retraining.
+
+### Challenge 5 : Deploying the Model as an API
 
 #### Problem
 - Even after building the ML pipeline, it remained offline and could only be used locally.
@@ -1085,7 +1233,7 @@ R2-Score on Unseen Data : 0.88
 - I implemented input validation and rate limiting to prevent misuse and ensure stability under load.
 - These improvements made the API accessible, reliable, and production-ready.
 
-### Challenge 5 : Accessibility for Non-Technical Users
+### Challenge 6 : Accessibility for Non-Technical Users
 
 #### Problem
 - Even if the API works correctly, non-technical users may still find it difficult to test and use.
@@ -1095,7 +1243,7 @@ R2-Score on Unseen Data : 0.88
 - I created an HTML/CSS/JS frontend that sends requests to the API and displays predictions instantly.
 - I also included an example payload in Swagger UI so users can test the API with minimal effort.
 
-### Challenge 6 : Consistent Deployment Across Environments
+### Challenge 7 : Consistent Deployment Across Environments
 
 #### Problem
 - Installing dependencies and setting up the environment manually is time-consuming and error-prone.
@@ -1117,47 +1265,51 @@ R2-Score on Unseen Data : 0.88
 ```
 AutoIQ/
 │
-├── api/                      # FastAPI Code to deploy API on Render
-│   ├── main.py              
-│   └── config.py            
+├── api/                        # FastAPI Code to deploy API on Render
+│   ├── main.py                 # App instance, middleware, and endpoints
+│   ├── models.py               # Lifespan loads pipe/model_freq/lower_pipe/upper_pipe
+│   ├── schemas.py              # Pydantic request & response models
+│   └── config.py               # Loads and validates environment variables
 │
-├── clean_data/               # Cleaned Dataset (Parquet Format)
+├── clean_data/                 # Cleaned Dataset (Parquet Format)
 │   └── clean_data.parquet
 │   └── ...
 │
-├── images/                   # Images for Frontend Interface
-│   ├── favicon.png
-│   └── hero_image.png
+├── frontend/                   # Frontend Application
+│   ├── fonts/                  # Self-hosted Satoshi font (woff2)
+│   ├── images/                 # Frontend Assets
+│   ├── index.html              # Frontend HTML File
+│   ├── script.js               # Frontend JS File
+│   └── style.css               # Frontend CSS File
 │
-├── models/                   # Serialized Components for Prediction
-│   ├── pipe.pkl
-│   └── model_freq.pkl
+├── models/                     # Serialized Components for Prediction
+│   ├── pipe.pkl                # Tuned XGBRegressor pipeline (point estimate)
+│   ├── model_freq.pkl          # Frequency-encoding dictionary for "model" column
+│   ├── lower_pipe.pkl          # Quantile pipeline, 10th percentile (price range lower bound)
+│   └── upper_pipe.pkl          # Quantile pipeline, 90th percentile (price range upper bound)
 │
-├── notebooks/                # Jupyter Notebooks for Project Development
-│   └── data_cleaning.ipynb
+├── notebooks/                  # Jupyter Notebooks for Project Development
 │   └── ...
 │
-├── scrape_code/              # Web Scraping Notebook
+├── scrape_code/                # Web Scraping Notebook
 │   └── scrape_code.ipynb
 │
-├── scrape_data/              # Scraped Dataset (CSV Format)
+├── scrape_data/                # Scraped Dataset (CSV Format)
 │   └── scrape_data.csv
 │
-├── utils/                    # Reusable Python Functions (utils Package)
+├── utils/                      # Reusable Python Functions (utils Package)
 │   ├── __init__.py
 │   ├── web_scraping.py
-│   └── helpers.py
+│   ├── export_data.py
 │   └── ...
 │
-├── .dockerignore             # All files and folders ignored by Docker while building Docker Image
-├── .gitignore                # All files and folders ignored by Git while pushing code to GitHub
-├── Dockerfile                # Instructions for building the Docker Image
-├── LICENSE                   # License specifying permissions and usage rights
-├── README.md                 # Detailed documentation of the Project
-├── index.html                # Frontend HTML File
-├── requirements.txt          # List of required libraries for the Project
-├── script.js                 # Frontend JS File
-└── style.css                 # Frontend CSS File
+├── .dockerignore               # All files and folders ignored by Docker while building Docker Image
+├── .env.example                # Template for required environment variables
+├── .gitignore                  # All files and folders ignored by Git while pushing code to GitHub
+├── Dockerfile                  # Instructions for building the Docker Image
+├── LICENSE                     # License specifying permissions and usage rights
+├── README.md                   # Detailed documentation of the Project
+└── requirements.txt            # List of required libraries for the Project
 ```
 
 <hr>
