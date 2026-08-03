@@ -1,15 +1,11 @@
 # Standard Libraries
-import pickle
 import logging
 
 # Third-Party Libraries
 import pandas as pd
 from sigfig import round
-from fastapi import FastAPI, Request
-from pydantic import BaseModel, Field
-from enum import Enum
+from fastapi import FastAPI, Request, HTTPException
 from babel.numbers import format_currency
-from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
 # Rate Limiting Libraries
@@ -19,30 +15,20 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 
 # Local Modules
 from api.config import settings
+from api.models import lifespan
+from api.schemas import Input, RootResponse, HealthResponse, PredictResponse
 
 # Logging the Output
 logging.basicConfig(level=logging.INFO, format="%(levelname)s:    %(message)s")
 logger = logging.getLogger(__name__)
 
-
-# Loading Pipeline and Model Frequency
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    try:
-        with open(settings.PIPE_PATH, "rb") as f:
-            app.state.pipe = pickle.load(f)
-            logger.info("Pipeline loaded successfully")
-        with open(settings.MODEL_FREQ_PATH, "rb") as f:
-            app.state.model_freq = pickle.load(f)
-            logger.info("Model frequency loaded successfully")
-    except Exception:
-        logger.exception("Model loading failed")
-
-    yield
-
-
 # Creating FastAPI App Instance
-app = FastAPI(title="AutoIQ", lifespan=lifespan)
+app = FastAPI(
+    title="AutoIQ : Used Car Pricing System",
+    description="Predicts a fair price range for used cars in (₹) using an XGBoost regression model.",
+    version="1.0.0",
+    lifespan=lifespan,
+)
 
 # Setting up Rate Limiter
 limiter = Limiter(key_func=get_remote_address)
@@ -60,96 +46,50 @@ app.add_middleware(
 
 
 # Root Endpoint
-@app.get("/", tags=["General"])
+@app.get("/", tags=["General"], response_model=RootResponse)
 def root():
     logger.info("Root endpoint accessed")
     return {"message": "Pipeline is live"}
 
 
 # Health Check Endpoint
-@app.get("/health", tags=["Utility"])
+@app.get("/health", tags=["Utility"], response_model=HealthResponse)
 def health():
     logger.info("Health endpoint accessed")
     return {
         "status": "ok",
         "pipeline_loaded": app.state.pipe is not None,
         "model_frequency_loaded": app.state.model_freq is not None,
+        "lower_pipeline_loaded": app.state.lower_pipe is not None,
+        "upper_pipeline_loaded": app.state.upper_pipe is not None,
     }
 
 
-# Input validation for fuel_type
-class FuelType(str, Enum):
-    PETROL = "Petrol"
-    DIESEL = "Diesel"
-    CNG = "CNG"
-
-
-# Input validation for transmission
-class Transmission(str, Enum):
-    MANUAL = "Manual"
-    AUTOMATIC = "Automatic"
-
-
-# Input validation for owner
-class OwnerType(str, Enum):
-    FIRST = "1st owner"
-    SECOND = "2nd owner"
-    THIRD = "3rd owner"
-    OTHERS = "Others"
-
-
-# Define Input Data Schema using Pydantic
-class Input(BaseModel):
-    brand: str = Field(..., description="Brand Name of your Car", examples=["MG"])
-    model: str = Field(..., description="Model Name of your Car", examples=["HECTOR"])
-    km_driven: int = Field(
-        ..., ge=1000, le=200000, description="KM Driven of your Car", examples=[80000]
-    )
-    engine_capacity: int = Field(
-        ...,
-        ge=700,
-        le=3000,
-        description="Engine Capacity (in cc) of your Car",
-        examples=[1498],
-    )
-    fuel_type: FuelType = Field(
-        ..., description="Fuel Type of your Car", examples=["Petrol"]
-    )
-    transmission: Transmission = Field(
-        ..., description="Transmission of your Car", examples=["Manual"]
-    )
-    year: int = Field(
-        ...,
-        ge=2010,
-        le=2024,
-        description="Manufacture Year of your Car",
-        examples=[2022],
-    )
-    owner: OwnerType = Field(
-        ..., description="Owner Type of your Car", examples=["1st owner"]
-    )
-
-
 # Prediction Endpoint
-@app.post("/predict", tags=["Prediction"])
+@app.post("/predict", tags=["Prediction"], response_model=PredictResponse)
 @limiter.limit("5/minute")
 async def predict(data: Input, request: Request):
     pipe = request.app.state.pipe
     model_freq = request.app.state.model_freq
+    lower_pipe = request.app.state.lower_pipe
+    upper_pipe = request.app.state.upper_pipe
 
     # Check if Models are Loaded
     if pipe is None:
         logger.error("Pipeline is not loaded")
-        return {"error": "Pipeline is not available"}
+        raise HTTPException(status_code=503, detail="Pipeline is not available")
     if model_freq is None:
         logger.error("Model frequency is not loaded")
-        return {"error": "Model frequency is not available"}
+        raise HTTPException(status_code=503, detail="Model frequency is not available")
+    if lower_pipe is None or upper_pipe is None:
+        logger.error("Range pipelines are not loaded")
+        raise HTTPException(status_code=503, detail="Range pipelines are not available")
 
     try:
         input_data = pd.DataFrame(
             {
                 "brand": [data.brand],
-                "model_freq": [model_freq.get(data.model)],
+                "model_freq": [model_freq.get(data.model, 0)],
                 "km_driven": [data.km_driven],
                 "engine_capacity": [data.engine_capacity],
                 "fuel_type": [data.fuel_type],
@@ -160,18 +100,23 @@ async def predict(data: Input, request: Request):
         )
         logger.info("Input data prepared for prediction")
 
-        prediction = round(pipe.predict(input_data)[0])
-        logger.info("Prediction made successfully")
+        lower_limit = max(round(lower_pipe.predict(input_data)[0]), 0)
+        upper_limit = round(upper_pipe.predict(input_data)[0])
+        if upper_limit < lower_limit:
+            logger.warning(
+                "Quantile crossing detected: upper prediction below lower, clamping"
+            )
+            upper_limit = lower_limit
+        logger.info("Price range predicted successfully")
 
-        lower_limit = prediction - settings.MAE
-        upper_limit = prediction + settings.MAE
-
-        format_lower = format_currency(round(lower_limit, 3), "INR", locale="en_IN")
-        format_upper = format_currency(round(upper_limit, 3), "INR", locale="en_IN")
+        format_lower = format_currency(lower_limit, "INR", locale="en_IN")
+        format_upper = format_currency(upper_limit, "INR", locale="en_IN")
 
         result = f"{format_lower.split('.')[0]} to {format_upper.split('.')[0]}"
         logger.info("Prediction formatted successfully")
         return {"output": result}
     except Exception:
         logger.exception("Prediction failed due to an exception")
-        return {"error": "An unexpected error occurred during prediction"}
+        raise HTTPException(
+            status_code=500, detail="An unexpected error occurred during prediction"
+        )
