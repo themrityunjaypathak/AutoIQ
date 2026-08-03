@@ -152,7 +152,7 @@ async function predict(event) {
 
     // API Request for Prediction
     try {
-        const fetchPromise = fetch("http://localhost:8000/predict", {
+        const fetchPromise = fetch("https://autoiq.onrender.com/predict", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
