@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-FF6D00?style=flat&logo=html5&logoColor=white)](https://autoiq-app.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-FF6D00?style=flat&logo=html5&logoColor=white)](https://autoiqlabs.vercel.app)
 [![API Docs](https://img.shields.io/badge/API-Docs-05998B?style=flat&logo=fastapi&logoColor=white)](https://autoiq.onrender.com/docs)
 [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-Image-1D63ED?style=flat&logo=docker&logoColor=white)](https://hub.docker.com/r/themrityunjaypathak/autoiq)
 [![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
@@ -13,7 +13,7 @@
 
 </div>
 
-<a href="https://autoiq-app.vercel.app"><img title="AutoIQ" src="https://github.com/user-attachments/assets/b4437a20-df79-43a7-b70d-363d52de8b1e"></a>
+<a href="https://autoiqlabs.vercel.app"><img title="AutoIQ" src="https://github.com/user-attachments/assets/b4437a20-df79-43a7-b70d-363d52de8b1e"></a>
 
 ## Table of Contents
 - [Problem](#problem)
@@ -661,9 +661,9 @@ The frontend application files are in the `frontend/` folder :
 > 
 > If the API was inactive, the first prediction may take a few seconds while the server spins back up.
 
-Access the live website [here](https://autoiq-app.vercel.app) or Click on the Image below.
+Access the live website [here](https://autoiqlabs.vercel.app) or Click on the Image below.
 
-<a href="https://autoiq-app.vercel.app"><img title="frontend-ui" src="https://github.com/user-attachments/assets/2e2b5c1e-252f-46bb-9eaa-7fe0e34b24ce"></a>
+<a href="https://autoiqlabs.vercel.app"><img title="frontend-ui" src="https://github.com/user-attachments/assets/2e2b5c1e-252f-46bb-9eaa-7fe0e34b24ce"></a>
 
 <hr>
 
