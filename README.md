@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-FF6D00?style=flat&logo=html5&logoColor=white)](https://autoiqlabs.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-FE0A0B?style=flat&logo=vercel&logoColor=white)](https://autoiqlabs.vercel.app)
 [![API Docs](https://img.shields.io/badge/API-Docs-05998B?style=flat&logo=fastapi&logoColor=white)](https://autoiq.onrender.com/docs)
 [![Docker Hub](https://img.shields.io/badge/Docker%20Hub-Image-1D63ED?style=flat&logo=docker&logoColor=white)](https://hub.docker.com/r/themrityunjaypathak/autoiq)
 [![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
